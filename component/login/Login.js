@@ -19,7 +19,7 @@ const Login = ({navigation}) => {
     const [securePassword, setSecurePassword] = useState(true);
 
     return (
-        <ImageBackground style={styles.backgroundImage} source={require('../images/background.jpg')}>
+        <ImageBackground style={styles.backgroundImage} source={require('./images/background.jpg')}>
             <StatusBar barStyle={'light-content'} />
             <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : null}
@@ -46,7 +46,7 @@ const Login = ({navigation}) => {
                                         secureTextEntry={securePassword}
                                     />
                                     <TouchableOpacity onPress={() => setSecurePassword(!securePassword)} style={styles.visibilityIcon}>
-                                        <Image source={securePassword ? require('../images/hide.png') : require('../images/view.png')} style={styles.icon} />
+                                        <Image source={securePassword ? require('./images/hide.png') : require('./images/view.png')} style={styles.icon} />
                                     </TouchableOpacity>
                                 </View>
                                 {/* Button Login */}

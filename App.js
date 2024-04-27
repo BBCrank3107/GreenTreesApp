@@ -4,11 +4,11 @@ import {
   StyleSheet,
 } from 'react-native';
 
-import AppServer from './studyCode/AppServer';
+import RootComponent from './component/index'
 
 const App = () => {
   return (
-    <AppServer/>
+    <RootComponent/>
   );
 };
 
