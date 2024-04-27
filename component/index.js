@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {
-    View, Text, SafeAreaView
+    View, Text, SafeAreaView, Image, StyleSheet
 } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
@@ -16,26 +16,71 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 function MyTabs() {
-  return (
-    <Tab.Navigator>
-      <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Weather" component={Weather} />
-      <Tab.Screen name="Price" component={Price} />
-      <Tab.Screen name="Account" component={Account} />
-    </Tab.Navigator>
-  );
+    return (
+        <Tab.Navigator
+            screenOptions={{
+                headerShown: false,
+                tabBarStyle: [{ display: 'flex' }, null]
+            }}>
+            <Tab.Screen name="Home" component={Home} options={{
+                tabBarIcon: ({ focused }) => (
+                    <Image
+                        source={require('../images/icons/home.png')}
+                        style={[styles.tabBarIcon, { tintColor: focused ? 'black' : 'gray' }]}
+                        resizeMode='stretch'
+                    />
+                ),
+                tabBarLabel: ''
+            }} />
+            <Tab.Screen name="Weather" component={Weather} options={{
+                tabBarIcon: ({ focused }) => (
+                    <Image
+                        source={require('../images/icons/weather.png')}
+                        style={[styles.tabBarIcon, { tintColor: focused ? 'black' : 'gray' }]}
+                        resizeMode='stretch'
+                    />
+                ),
+                tabBarLabel: ''
+            }} />
+            <Tab.Screen name="Price" component={Price} options={{
+                tabBarIcon: ({ focused }) => (
+                    <Image
+                        source={require('../images/icons/price.png')}
+                        style={[styles.tabBarIcon, { tintColor: focused ? 'black' : 'gray' }]}
+                        resizeMode='stretch'
+                    />
+                ),
+                tabBarLabel: ''
+            }} />
+            <Tab.Screen name="Account" component={Account} options={{
+                tabBarIcon: ({ focused }) => (
+                    <Image
+                        source={require('../images/icons/account.png')}
+                        style={[styles.tabBarIcon, { tintColor: focused ? 'black' : 'gray' }]}
+                        resizeMode='stretch'
+                    />
+                ),
+                tabBarLabel: ''
+            }} />
+        </Tab.Navigator>
+    );
 }
 
 export default RootComponent = function () {
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName="Login" screenOptions={{headerShown: false}}>
+            <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="Login" component={Login} />
-                <Stack.Screen name="Home" component={Home} />
-                <Stack.Screen name="Weather" component={Weather} />
-                <Stack.Screen name="Price" component={Price} />
-                <Stack.Screen name="Account" component={Account} />
+                <Stack.Screen name="HomeTabs" component={MyTabs} />
             </Stack.Navigator>
         </NavigationContainer>
     )
 }
+
+const styles = StyleSheet.create({
+    tabBarIcon: {
+        width: 26,
+        height: 26,
+        marginTop: 15,
+    },
+});
