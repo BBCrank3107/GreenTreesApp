@@ -11,6 +11,7 @@ import Home from './home/Home';
 import Weather from './weather/Weather';
 import Price from './price/Price';
 import Account from './account/Account';
+import Shop from './shop/Shop';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -46,6 +47,16 @@ function MyTabs() {
                 tabBarIcon: ({ focused }) => (
                     <Image
                         source={require('../images/icons/price.png')}
+                        style={[styles.tabBarIcon, { tintColor: focused ? 'black' : 'gray' }]}
+                        resizeMode='stretch'
+                    />
+                ),
+                tabBarLabel: ''
+            }} />
+            <Tab.Screen name="Shop" component={Shop} options={{
+                tabBarIcon: ({ focused }) => (
+                    <Image
+                        source={require('../images/icons/shop.png')}
                         style={[styles.tabBarIcon, { tintColor: focused ? 'black' : 'gray' }]}
                         resizeMode='stretch'
                     />
