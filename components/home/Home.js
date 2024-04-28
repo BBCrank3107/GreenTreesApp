@@ -9,7 +9,6 @@ const Home = ({ navigation }) => {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <View style={{ flex: 1, alignItems: 'center' }}>
-                <Text style={{ fontSize: 20 }}>Home Screen</Text>
                 <ImageCarousel imageList={imageList} stepCarousel={stepCarousel} handleScroll={handleScroll} />
             </View>
         </SafeAreaView>

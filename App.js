@@ -4,7 +4,7 @@ import {
   StyleSheet,
 } from 'react-native';
 
-import RootComponent from './component/index'
+import RootComponent from './components/index'
 
 const App = () => {
   return (
