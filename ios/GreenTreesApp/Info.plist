@@ -50,6 +50,9 @@
 	<key>UIAppFonts</key>
 	<array>
 		<string>Merriweather-Regular.ttf</string>
+		<string>Merriweather-Bold.ttf</string>
+		<string>Merriweather-BoldItalic.ttf</string>
+		<string>Merriweather-Italic.ttf</string>
 	</array>
 </dict>
 </plist>

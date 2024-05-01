@@ -12,6 +12,11 @@ import Weather from './weather/Weather';
 import Price from './price/Price';
 import Account from './account/Account';
 import Shop from './shop/Shop';
+import Container from './home/components/Container';
+import PlantTheTree from './home/components/menuItems/PlantTheTree';
+import WaterTheTree from './home/components/menuItems/WaterTheTree';
+import PlantPreservation from './home/components/menuItems/PlantPreservation';
+import PlantPackaging from './home/components/menuItems/PlantPackaging';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -83,6 +88,11 @@ export default RootComponent = function () {
             <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="Login" component={Login} />
                 <Stack.Screen name="HomeTabs" component={MyTabs} />
+                <Stack.Screen name="Container" component={Container} />
+                <Stack.Screen name="PlantTheTree" component={PlantTheTree} />
+                <Stack.Screen name="WaterTheTree" component={WaterTheTree} />
+                <Stack.Screen name="PlantPreservation" component={PlantPreservation} />
+                <Stack.Screen name="PlantPackaging" component={PlantPackaging} />
             </Stack.Navigator>
         </NavigationContainer>
     )

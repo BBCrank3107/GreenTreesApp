@@ -1,0 +1,21 @@
+import React, { Component } from 'react';
+import {
+    SafeAreaView,
+    View,
+    Text,
+} from 'react-native';
+
+const PlantPreservation = ({navigation}) => {
+
+    return (
+        <SafeAreaView style={{flex: 1}}>
+            <View style={{flexDirection:'column', width: '100%', height: '100%'}}>
+                <View style={{width: '100%', height: "50%", justifyContent:'center', alignItems: 'center'}}>
+                    <Text style={{fontSize: 30, fontWeight: 'bold'}}>PlantPreservation Screen</Text>
+                </View>
+            </View>
+        </SafeAreaView>
+    );
+}
+
+export default PlantPreservation;
