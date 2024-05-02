@@ -21,7 +21,7 @@ const WeatherInfo = ({ data, cityTranslations, weatherTranslations }) => {
 const styles = StyleSheet.create({
     weatherInfo: {
         alignItems: 'center',
-        marginTop: 20,
+        marginTop: 60,
     },
     cityCountryText: {
         fontSize: 40,
