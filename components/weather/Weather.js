@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { StyleSheet, View, ImageBackground, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, ImageBackground, ActivityIndicator} from 'react-native';
 import WeatherInput from './components/WeatherInput';
 import WeatherInfo from './components/WeatherInfo';
 
@@ -34,12 +34,33 @@ const Weather = () => {
         "Dalat": "Đà Lạt"
     };
 
+    const weatherIcons = {
+        "Clear": require('./images/icons/clear.png'),
+        "Clouds": require('./images/icons/clouds.png'),
+        "Drizzle": require('./images/icons/drizzle.png'),
+        "Rain": require('./images/icons/rain.png'),
+        "Thunderstorm": require('./images/icons/thunderstorm.png'),
+        "Snow": require('./images/icons/snow.png'),
+        "Mist": require('./images/icons/mist.png'),
+        "Smoke": require('./images/icons/smoke.png'),
+        "Haze": require('./images/icons/haze.png'),
+        "Dust": require('./images/icons/dust.png'),
+        "Fog": require('./images/icons/fog.png'),
+        "Sand": require('./images/icons/sand.png'),
+        "Ash": require('./images/icons/ash.png'),
+        "Squall": require('./images/icons/squall.png'),
+        "Tornado": require('./images/icons/tornado.png')
+    };
+
     const api = {
         key: 'e53fb7bbe0678e4c71109589050d01c4',
         baseUrl: 'http://api.openweathermap.org/data/2.5/',
     }
 
     const fetchDataHandler = useCallback(() => {
+        if (!input) {
+            return;
+        }
         setLoading(true);
         setInput('');
 
@@ -66,7 +87,7 @@ const Weather = () => {
             <ImageBackground source={require('./images/images/bg1.jpg')} resizeMode='cover' style={styles.image}>
                 <WeatherInput input={input} setInput={setInput} fetchDataHandler={fetchDataHandler} />
                 {loading && <ActivityIndicator size={"large"} color='#000' />}
-                {data && <WeatherInfo data={data} cityTranslations={cityTranslations} weatherTranslations={weatherTranslations} />}
+                {data && <WeatherInfo data={data} cityTranslations={cityTranslations} weatherTranslations={weatherTranslations} weatherIcons={weatherIcons} />}
             </ImageBackground>
         </View>
     );

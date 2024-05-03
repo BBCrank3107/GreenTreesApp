@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 
-const WeatherInfo = ({ data, cityTranslations, weatherTranslations }) => {
+const WeatherInfo = ({ data, cityTranslations, weatherTranslations, weatherIcons }) => {
+    const weatherIcon = weatherIcons[data.weather[0].main] || require('../images/icons/default.png');
     return (
         <View style={styles.weatherInfo}>
             <Text style={styles.cityCountryText}>{cityTranslations[data.name] || data.name}, {data.sys.country}</Text>
@@ -10,7 +11,7 @@ const WeatherInfo = ({ data, cityTranslations, weatherTranslations }) => {
             <Text style={styles.minMaxText}>Thấp nhất: {Math.round(data.main.temp_min)}°C / Cao nhất: {Math.round(data.main.temp_max)}°C</Text>
             <Image
                 style={styles.weatherIcon}
-                source={{ uri: `http://openweathermap.org/img/w/${data.weather[0].icon}.png` }}
+                source={weatherIcon}
             />
             <Text style={styles.weatherText}>{weatherTranslations[data.weather[0].main]}</Text>
             <Text style={styles.additionalInfo}>Gió: {data.wind.speed} m/s, Độ ẩm: {data.main.humidity}%</Text>
@@ -21,7 +22,7 @@ const WeatherInfo = ({ data, cityTranslations, weatherTranslations }) => {
 const styles = StyleSheet.create({
     weatherInfo: {
         alignItems: 'center',
-        marginTop: 60,
+        marginTop: 40,
     },
     cityCountryText: {
         fontSize: 40,
@@ -46,7 +47,7 @@ const styles = StyleSheet.create({
     },
     weatherIcon: {
         width: 150,
-        height: 100,
+        height: 150,
     },
     weatherText: {
         fontSize: 30,

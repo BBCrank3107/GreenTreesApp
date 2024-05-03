@@ -1,7 +1,11 @@
 import React from 'react';
-import { TextInput, StyleSheet, TouchableOpacity, Image, View } from 'react-native';
+import { TextInput, StyleSheet, TouchableOpacity, Image, View, Keyboard } from 'react-native';
 
 const WeatherInput = ({ input, setInput, fetchDataHandler }) => {
+    const hideKeyboard = () => {
+        Keyboard.dismiss();
+    };
+
     return (
         <View style={styles.container}>
             <View style={styles.inputContainer}>
@@ -12,7 +16,7 @@ const WeatherInput = ({ input, setInput, fetchDataHandler }) => {
                     placeholderTextColor="#000"
                     style={styles.textInput}
                 />
-                <TouchableOpacity onPress={fetchDataHandler} style={styles.iconContainer}>
+                <TouchableOpacity onPress={() => {fetchDataHandler(); hideKeyboard();}} style={styles.iconContainer}>
                     <Image source={require('../images/icons/search.png')} style={styles.icon} />
                 </TouchableOpacity>
             </View>
