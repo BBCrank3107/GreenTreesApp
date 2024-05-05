@@ -48,6 +48,22 @@ app.get('/category', (req, res) => {
     });
 });
 
+// Select data price from plant
+app.get('/category/plants', (req, res) => {
+    const sql = `
+        SELECT c.CategoryID, c.CategoryName, p.PlantID, p.PlantName, p.AVGPriceNow, (p.AVGPriceNow - p.AVGPriceYesterday) AS Fluctuations
+        FROM category c
+        INNER JOIN plant p ON c.CategoryID = p.CategoryID
+    `;
+    db.query(sql, (err, result) => {
+        if (err) {
+            res.status(500).send({ message: 'Error retrieving data' });
+            throw err;
+        }
+        res.status(200).send(result);
+    });
+});
+
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
