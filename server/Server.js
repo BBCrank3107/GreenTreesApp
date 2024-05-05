@@ -48,6 +48,18 @@ app.get('/category', (req, res) => {
     });
 });
 
+// Select data infor
+app.get('/infor', (req, res) => {
+    const sql = `SELECT * FROM infor`;
+    db.query(sql, (err, result) => {
+        if (err) {
+            res.status(500).send({ message: 'Error retrieving data' });
+            throw err;
+        }
+        res.status(200).send(result);
+    });
+});
+
 // Select data price from plant
 app.get('/category/plants', (req, res) => {
     const sql = `

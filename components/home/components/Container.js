@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-const Container = ({ expandedRow, toggleRowExpansion }) => {
+const Container = ({ expandedRow, toggleRowExpansion, plantData }) => {
     const navigation = useNavigation();
 
     const images = [
@@ -15,35 +15,62 @@ const Container = ({ expandedRow, toggleRowExpansion }) => {
     ];
 
     const renderCardViews = () => {
-        const cardViews = [];
-        for (let rowIndex = 0; rowIndex < 3; rowIndex++) {
-            const rowViews = [];
-            for (let cardIndex = 0; cardIndex < 2; cardIndex++) {
-                const index = rowIndex * 2 + cardIndex;
-                const isExpanded = index === expandedRow;
-                rowViews.push(
+        const rows = [];
+        for (let i = 0; i < plantData.length; i += 2) {
+            const rowData = [];
+            for (let j = i; j < Math.min(i + 2, plantData.length); j++) {
+                const data = plantData[j];
+                const isExpanded = data.InforID === expandedRow;
+                rowData.push(
                     <TouchableOpacity
-                        key={index}
+                        key={data.InforID}
                         style={[styles.cardView, isExpanded && styles.expandedCard]}
-                        onPress={() => toggleRowExpansion(index)}
+                        onPress={() => toggleRowExpansion(data.InforID)}
                         disabled={isExpanded}
                     >
-                        <ImageBackground source={images[index]} style={styles.imageBackground}>
+                        <ImageBackground source={images[j]} style={styles.imageBackground}>
                             {isExpanded && (
                                 <>
                                     <View style={styles.rowInCardView}>
-                                        <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('PlantTheTree')}>
+                                        <TouchableOpacity
+                                            style={styles.menuItem}
+                                            onPress={() => navigation.navigate('PlantTheTree', {
+                                                climate: data.Climate,
+                                                land: data.Land,
+                                                target: data.Target,
+                                                time: data.Time
+                                            })}
+                                        >
                                             <Image source={require('../images/icons/plant.png')} style={styles.icon} />
                                         </TouchableOpacity>
-                                        <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('WaterTheTree')}>
+                                        <TouchableOpacity
+                                            style={styles.menuItem}
+                                            onPress={() => navigation.navigate('WaterTheTree', {
+                                                water: data.Water,
+                                                fertilize: data.Fertilize
+                                            })}
+                                        >
                                             <Image source={require('../images/icons/water.png')} style={styles.icon} />
                                         </TouchableOpacity>
                                     </View>
                                     <View style={styles.rowInCardView}>
-                                        <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('PlantPreservation')}>
+                                        <TouchableOpacity
+                                            style={styles.menuItem}
+                                            onPress={() => navigation.navigate('PlantPreservation', {
+                                                grass: data.Grass,
+                                                insect: data.Insect,
+                                                disease: data.Disease
+                                            })}
+                                        >
                                             <Image source={require('../images/icons/shield.png')} style={styles.icon} />
                                         </TouchableOpacity>
-                                        <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('PlantPackaging')}>
+                                        <TouchableOpacity
+                                            style={styles.menuItem}
+                                            onPress={() => navigation.navigate('PlantPackaging', {
+                                                harvest: data.Harvest,
+                                                preserve: data.Preserve
+                                            })}
+                                        >
                                             <Image source={require('../images/icons/package.png')} style={styles.icon} />
                                         </TouchableOpacity>
                                     </View>
@@ -53,13 +80,13 @@ const Container = ({ expandedRow, toggleRowExpansion }) => {
                     </TouchableOpacity>
                 );
             }
-            cardViews.push(
-                <View key={rowIndex} style={styles.rowInContainer}>
-                    {rowViews}
+            rows.push(
+                <View key={i} style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
+                    {rowData}
                 </View>
             );
         }
-        return cardViews;
+        return rows;
     };
 
     return (
@@ -124,6 +151,11 @@ const styles = StyleSheet.create({
         height: '50%',
         resizeMode: 'contain',
         tintColor: 'white'
+    },
+    plantIDText: {
+        color: 'white',
+        fontSize: 18,
+        marginTop: 10,
     },
 });
 

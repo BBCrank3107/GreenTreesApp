@@ -42,14 +42,18 @@ const Price = () => {
 
     const renderPlantItem = ({ item }) => {
         const fluctuationColor = item.Fluctuations < 0 ? styles.redText : styles.greenText;
-
-        return (
-            <View style={styles.row}>
-                <Text style={[styles.label, styles.plantName]}>{item.PlantName}</Text>
-                <Text style={[styles.label, styles.price, fluctuationColor]}>{item.AVGPriceNow}</Text>
-                <Text style={[styles.label, styles.fluctuations, fluctuationColor]}>{item.Fluctuations}</Text>
-            </View>
-        );
+    
+        if (item.AVGPriceNow !== null && item.AVGPriceYesterday !== null) {
+            return (
+                <View style={styles.row}>
+                    <Text style={[styles.label, styles.plantName]}>{item.PlantName}</Text>
+                    <Text style={[styles.label, styles.price, fluctuationColor]}>{item.AVGPriceNow}</Text>
+                    <Text style={[styles.label, styles.fluctuations, fluctuationColor]}>{item.Fluctuations}</Text>
+                </View>
+            );
+        } else {
+            return null;
+        }
     };
 
     const renderCategoryCard = ({ item: { categoryName, plants } }) => (

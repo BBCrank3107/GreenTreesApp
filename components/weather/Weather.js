@@ -84,7 +84,7 @@ const Weather = () => {
 
     return (
         <View style={styles.root}>
-            <ImageBackground source={require('./images/images/bg1.jpg')} resizeMode='cover' style={styles.image}>
+            <ImageBackground source={require('./images/images/bg.png')} resizeMode='cover' style={styles.image}>
                 <WeatherInput input={input} setInput={setInput} fetchDataHandler={fetchDataHandler} />
                 {loading && <ActivityIndicator size={"large"} color='#000' />}
                 {data && <WeatherInfo data={data} cityTranslations={cityTranslations} weatherTranslations={weatherTranslations} weatherIcons={weatherIcons} />}

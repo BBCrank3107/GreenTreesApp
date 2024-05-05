@@ -26,23 +26,23 @@ const styles = StyleSheet.create({
     },
     cityCountryText: {
         fontSize: 40,
-        color: '#fff',
+        color: 'black',
         fontWeight: 'bold',
         marginBottom: 10,
     },
     dateText: {
-        color: '#fff',
+        color: 'black',
         fontSize: 22,
         marginBottom: 10,
     },
     tempText: {
         fontSize: 45,
-        color: '#fff',
+        color: 'black',
         marginBottom: 10,
     },
     minMaxText: {
         fontSize: 22,
-        color: '#fff',
+        color: 'black',
         marginBottom: 10,
     },
     weatherIcon: {
@@ -51,12 +51,12 @@ const styles = StyleSheet.create({
     },
     weatherText: {
         fontSize: 30,
-        color: '#fff',
+        color: 'black',
         marginBottom: 10,
     },
     additionalInfo: {
         fontSize: 22,
-        color: '#fff',
+        color: 'black',
         marginBottom: 10,
     },
 });

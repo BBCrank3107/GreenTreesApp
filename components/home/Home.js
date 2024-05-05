@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { SafeAreaView, ScrollView, View, Text, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { SafeAreaView, ScrollView, View, Text, StyleSheet, ImageBackground } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import useAutoScroll from './js/autoScroll';
 import ImageCarousel from './components/ImageCarousel';
@@ -13,23 +13,44 @@ const Home = () => {
         setExpandedRow(index === expandedRow ? null : index);
     };
 
+    const [plantData, setPlantData] = useState([]);
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const fetchData = async () => {
+        try {
+            const response = await fetch('http://192.168.1.3:3000/infor');
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            setPlantData(data);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-                <View style={styles.container}>
-                    <ImageCarousel imageList={imageList} stepCarousel={stepCarousel} handleScroll={handleScroll} />
-                    <LinearGradient
-                        colors={['rgba(19,82,0,1)', 'rgba(35,255,0,1)']}
-                        start={{ x: 0, y: 0 }}
-                        end={{ x: 1, y: 1 }}
-                        locations={[0, 1]}
-                        style={styles.titleContainer}
-                    >
-                        <Text style={styles.title}>Chăm sóc cây trồng</Text>
-                    </LinearGradient>
-                    <Container expandedRow={expandedRow} toggleRowExpansion={toggleRowExpansion} />
-                </View>
-            </ScrollView>
+            <ImageBackground source={require('./images/images/bg5.jpg')} resizeMode='cover' style={{height: '100%'}}>
+                <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+                    <View style={styles.container}>
+                        <ImageCarousel imageList={imageList} stepCarousel={stepCarousel} handleScroll={handleScroll} />
+                        <LinearGradient
+                            colors={['rgba(19,82,0,1)', 'rgba(35,255,0,1)']}
+                            start={{ x: 0, y: 0 }}
+                            end={{ x: 1, y: 1 }}
+                            locations={[0, 1]}
+                            style={styles.titleContainer}
+                        >
+                            <Text style={styles.title}>Chăm sóc cây trồng</Text>
+                        </LinearGradient>
+                        <Container expandedRow={expandedRow} toggleRowExpansion={toggleRowExpansion} plantData={plantData} />
+                    </View>
+                </ScrollView>
+            </ImageBackground>
         </SafeAreaView>
     );
 };
