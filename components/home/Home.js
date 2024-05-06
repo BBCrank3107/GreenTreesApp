@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView, ScrollView, View, Text, StyleSheet, ImageBackground } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
 import useAutoScroll from './js/autoScroll';
 import ImageCarousel from './components/ImageCarousel';
 import Container from './components/Container';
