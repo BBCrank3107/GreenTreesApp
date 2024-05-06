@@ -1,178 +1,370 @@
-import React, { useState } from 'react';
+import { useState } from "react";
 import {
-    SafeAreaView,
-    View,
-    Text,
-    TouchableOpacity,
-    ImageBackground,
-    StatusBar,
-    TextInput,
-    Image,
-    KeyboardAvoidingView,
     StyleSheet,
-    TouchableWithoutFeedback,
-    Keyboard,
-    Platform
-} from 'react-native';
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
+    StatusBar,
+    Image
+} from "react-native";
+const LOGIN = "LOGIN";
+const SIGN_UP = "SIGN_UP";
 
-const Login = ({navigation}) => {
-    const [securePassword, setSecurePassword] = useState(true);
+const Login = ({ navigation }) => {
+    const [page, setPage] = useState(LOGIN);
+    const [pwdHidden, setPwdHidden] = useState(true);
 
-    return (
-        <ImageBackground style={styles.backgroundImage} source={require('./images/background.jpg')}>
-            <StatusBar barStyle={'light-content'} />
-            <KeyboardAvoidingView
-                behavior={Platform.OS === 'ios' ? 'padding' : null}
-                style={styles.container}>
-                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                    <SafeAreaView style={styles.safeArea}>
-                        <View style={styles.container}>
-                            {/* Container */}
-                            <View style={styles.formContainer}>
-                                {/* email */}
-                                <View style={styles.inputContainer}>
-                                    <TextInput
-                                        style={styles.input}
-                                        placeholder='Enter your email'
-                                        autoCapitalize='none'
-                                    />
-                                </View>
-                                {/* password */}
-                                <View style={styles.inputContainer}>
-                                    <TextInput
-                                        style={styles.input}
-                                        placeholder='Enter your password'
-                                        autoCapitalize='none'
-                                        secureTextEntry={securePassword}
-                                    />
-                                    <TouchableOpacity onPress={() => setSecurePassword(!securePassword)} style={styles.visibilityIcon}>
-                                        <Image source={securePassword ? require('./images/hide.png') : require('./images/view.png')} style={styles.icon} />
-                                    </TouchableOpacity>
-                                </View>
-                                {/* Button Login */}
-                                <View style={styles.buttonContainer}>
-                                    <TouchableOpacity style={styles.button}
-                                    onPress={()=>{
-                                        navigation.navigate('HomeTabs')
-                                    }}>
-                                        <Text style={styles.buttonText}>Log in</Text>
-                                    </TouchableOpacity>
-                                </View>
-                                <View style={styles.forgotPasswordContainer}>
-                                    <Text style={styles.forgotPasswordText}>Forgot password?</Text>
-                                </View>
+    const renderForm = () => {
+        if (page === LOGIN) {
+            return (
+                <View style={{ width: '100%', height: '60%' }}>
+                    <View style={styles.atext}>
+                        <Text style={styles.textIn}>Đăng nhập vào tài khoản</Text>
+                    </View>
+                    <TextInput style={styles.input1} placeholder="E-mail"></TextInput>
+                    <View style={styles.pass}>
+                        <TextInput
+                            style={styles.input2}
+                            placeholder="Nhập mật khẩu"
+                            secureTextEntry={pwdHidden ? true : false}
+                        ></TextInput>
+                        <TouchableOpacity
+                            style={styles.iconContainer}
+                            onPress={() => setPwdHidden(!pwdHidden)}
+                        >
+                            <Image
+                                source={!pwdHidden ? require("./images/hide.png") : require("./images/view.png")}
+                                resizeMode="stretch"
+                                style={styles.iconshowpass}
+                            />
+                        </TouchableOpacity>
+                    </View>
+                    <TouchableOpacity style={styles.areaforgot}>
+                        <Text style={styles.forgot}>Quên mật khẩu?</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.btn}
+                        onPress={() => {
+                            navigation.navigate('HomeTabs')
+                        }}
+                    >
+                        <Text style={styles.textBtn}>Đăng nhập</Text>
+                    </TouchableOpacity>
+
+                    <View style={styles.footer}>
+                        <View style={styles.solid}>
+                            <View style={styles.left}></View>
+                            <View>
+                                <Text>hoặc</Text>
                             </View>
-                            {/* Bottom */}
-                            {/* Button Create Account */}
-                            <View style={styles.createAccountContainer}>
-                                <TouchableOpacity style={styles.createAccountButton}
-                                onPress={()=>{
-                                    navigation.navigate('SignUp')
-                                }}
-                                >
-                                    <Text style={styles.createAccountButtonText}>Create Account</Text>
-                                </TouchableOpacity>
-                            </View>
+                            <View style={styles.right}></View>
                         </View>
-                    </SafeAreaView>
-                </TouchableWithoutFeedback>
-            </KeyboardAvoidingView>
-        </ImageBackground>
+                        <View style={styles.logo}>
+                            <TouchableOpacity style={styles.logoLeft}>
+                                <Text style={styles.logoLeftText}>Google</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.logoRight}>
+                                <Text style={styles.logoRightText}>Apple</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            );
+        } else if (page === SIGN_UP) {
+            return (
+                <View style={{ width: '100%', height: '50%' }}>
+                    <View style={styles.atext}>
+                        <Text style={styles.textIn}>Đăng ký tài khoản</Text>
+                    </View>
+                    <TextInput style={styles.input1} placeholder="E-mail"></TextInput>
+                    <View style={styles.pass}>
+                        <TextInput
+                            style={styles.input2}
+                            placeholder="Nhập mật khẩu"
+                            secureTextEntry={pwdHidden ? true : false}
+                        ></TextInput>
+                        <TouchableOpacity
+                            style={styles.iconContainer}
+                            onPress={() => setPwdHidden(!pwdHidden)}
+                        >
+                            <Image
+                                source={!pwdHidden ? require("./images/hide.png") : require("./images/view.png")}
+                                resizeMode="stretch"
+                                style={styles.iconshowpass}
+                            />
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.pass}>
+                        <TextInput
+                            style={styles.input2}
+                            placeholder="Nhập lại mật khẩu"
+                            secureTextEntry={pwdHidden ? true : false}
+                        ></TextInput>
+                        <TouchableOpacity
+                            style={styles.iconContainer}
+                            onPress={() => setPwdHidden(!pwdHidden)}
+                        >
+                            <Image
+                                source={!pwdHidden ? require("./images/hide.png") : require("./images/view.png")}
+                                resizeMode="stretch"
+                                style={styles.iconshowpass}
+                            />
+                        </TouchableOpacity>
+                    </View>
+
+                    <TouchableOpacity style={styles.btn}>
+                        <Text style={styles.textBtn}>Đăng ký ngay</Text>
+                    </TouchableOpacity>
+
+                    <View style={{ justifyContent: "center", alignItems: "center", paddingVertical: 10, paddingHorizontal: 20 }}>
+                        <Text>
+                            Bằng cách nhấp vào Đăng ký, bạn đồng ý với Điều khoản và Chính sách của chúng tôi.
+                        </Text>
+                    </View>
+                </View>
+            );
+        }
+    }
+    return (
+        <View style={styles.content}>
+            <StatusBar barStyle="light-content" />
+            {/* // loginheader */}
+            <View style={styles.header}>
+                <View style={styles.under}>
+                    <Text style={styles.headText}>GreenTrees</Text>
+                    <Text style={styles.headText2}>think for nature</Text>
+                </View>
+                <View style={styles.abort}>
+                    <TouchableOpacity
+                        style={styles.btn_login}
+                        onPress={() => setPage(LOGIN)}
+                        disabled={page === LOGIN ? true : false}
+                    >
+                        <Text style={styles.cl}>Đăng nhập</Text>
+                        {page === LOGIN ? <View style={styles.brightbar}></View> : null}
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.btn_signup}
+                        onPress={() => setPage(SIGN_UP)}
+                        disabled={page === SIGN_UP ? true : false}
+                    >
+                        <Text style={styles.cl}>Đăng ký</Text>
+                        {page === SIGN_UP ? <View style={styles.brightbar}></View> : null}
+                    </TouchableOpacity>
+                </View>
+            </View>
+            {/* end loginheader */}
+
+            {/* Body */}
+            <View style={styles.body}>{renderForm()}</View>
+            {/* End Body */}
+
+        </View>
     );
 }
 
 export default Login;
 
 const styles = StyleSheet.create({
-    backgroundImage: {
+    content: {
+        display: "flex",
         flex: 1,
+        backgroundColor: "rgba(215, 213, 213, 0.362)",
     },
-    container: {
+    header: {
+        width: "100%",
+        height: "30%",
+    },
+    under: {
+        width: "100%",
         flex: 1,
+        backgroundColor: "#4D8D6E",
+        justifyContent: "center",
+        alignItems: "center",
     },
-    safeArea: {
-        flex: 1,
+    headText: {
+        fontSize: 40,
+        color: "white",
+        fontWeight: "700",
     },
-    formContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
+    headText2: {
+        color: "white",
     },
-    inputContainer: {
-        width: '100%',
-        height: 75,
-        padding: 10,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    input: {
-        width: '100%',
-        height: '100%',
-        backgroundColor: 'white',
-        borderWidth: 1,
-        borderColor: 'blue',
-        borderRadius: 15,
-        fontSize: 21,
-        paddingStart: 10,
-    },
-    visibilityIcon: {
-        position: 'absolute',
-        right: 20,
-        top: '28%',
-        padding: 10,
-    },
-    icon: {
-        width: 24,
-        height: 24,
-    },
-    buttonContainer: {
-        width: '100%',
-        height: 70,
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 10,
-    },
-    button: {
-        width: '100%',
-        height: '100%',
-        backgroundColor: 'blue',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 30,
-    },
-    buttonText: {
-        color: 'white',
-        fontSize: 21,
-    },
-    forgotPasswordContainer: {
-        width: '100%',
+    abort: {
+        width: "100%",
         height: 50,
-        alignItems: 'center',
-        padding: 10,
+        backgroundColor: "white",
+        display: "flex",
+        flexDirection: "row",
     },
-    forgotPasswordText: {
-        fontSize: 21,
-        color: 'white',
+    btn_login: {
+        width: "50%",
+        height: "100%",
+        justifyContent: "center",
+        alignItems: "center",
     },
-    createAccountContainer: {
-        width: '100%',
-        height: 70,
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 10,
+    btn_signup: {
+        width: "50%",
+        height: "100%",
+        justifyContent: "center",
+        alignItems: "center",
     },
-    createAccountButton: {
-        width: '100%',
-        height: '100%',
-        backgroundColor: 'white',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 30,
-        borderColor: 'blue',
+    cl: {
+        color: "#4D8D6E",
+        fontSize: 20,
+    },
+    brightbar: {
+        position: "absolute",
+        bottom: 0,
+        height: 3,
+        width: "100%",
+        backgroundColor: "#4D8D6E",
+    },
+
+    //  body
+    atext: {
+        width: "100%",
+        height: "35%",
+        justifyContent: "center",
+    },
+    textIn: {
+        fontSize: 25,
+        fontWeight: "500",
+        marginLeft: 30,
+    },
+    input1: {
+        width: 330,
+        height: 60,
         borderWidth: 1,
+        borderColor: "rgba(219, 218, 216, 0.362)",
+        borderRadius: 6,
+        paddingHorizontal: 10,
+        marginBottom: 20,
+        fontWeight: "500",
+        marginLeft: 30,
+        backgroundColor: "white",
+        fontSize: 16
     },
-    createAccountButtonText: {
-        color: 'blue',
-        fontSize: 21,
+    input2: {
+        backgroundColor: "white",
+        width: 330,
+        height: 60,
+        borderWidth: 1,
+        borderColor: "rgba(219, 218, 216, 0.362)",
+        borderRadius: 6,
+        paddingHorizontal: 10,
+        marginBottom: 20,
+        fontWeight: "500",
+        marginLeft: 30,
+        fontSize: 16
+    },
+    iconContainer: {
+        position: "absolute",
+        right: 45,
+        top: 17,
+        transform: [{ translateY: -12 }],
+        marginLeft: 10,
+    },
+    iconshowpass: {
+        width: 20,
+        height: 20,
+    },
+    email: {
+        justifyContent: "center",
+    },
+    pass: {
+        flexDirection: "row",
+    },
+    iconshowpass: {
+        width: 20,
+        height: 20,
+        marginTop: 17,
+    },
+    areaforgot: {
+        width: "100%",
+        marginBottom: 20,
+    },
+    forgot: {
+        textAlign: "right",
+        marginRight: 30,
+        fontSize: 14,
+        // color: "rgba(107, 106, 106, 0.362)",
+        fontWeight: "500",
+    },
+    areabtnlogin: {
+        width: "100%",
+        height: 30,
+    },
+    btn: {
+        width: 330,
+        height: 60,
+        backgroundColor: "#109672",
+        marginLeft: 30,
+        borderRadius: 70,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    textBtn: {
+        margin: "auto",
+        color: "white",
+        fontSize: 20,
+        fontWeight: "600",
+    },
+    // endbody
+
+    footer: {
+        height: "70%",
+        marginTop: 20
+    },
+    solid: {
+        height: "20%",
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    left: {
+        height: 1,
+        width: "36%",
+        backgroundColor: "#707070",
+        marginRight: 5,
+    },
+    right: {
+        height: 1,
+        width: "36%",
+        backgroundColor: "#707070",
+        marginLeft: 5,
+    },
+    logo: {
+        height: "60%",
+        width: "100%",
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    logoLeft: {
+        width: 120,
+        height: 60,
+        backgroundColor: "white",
+        justifyContent: "center",
+        alignItems: "center",
+        marginRight: 10,
+        borderRadius: 10,
+    },
+    logoRight: {
+        width: 120,
+        height: 60,
+        backgroundColor: "white",
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: 10,
+    },
+    logoLeftText: {
+        fontWeight: "600",
+    },
+    logoRightText: {
+        fontWeight: "600",
     },
 });

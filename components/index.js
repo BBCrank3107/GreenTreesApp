@@ -17,6 +17,9 @@ import PlantTheTree from './home/components/menuItems/PlantTheTree';
 import WaterTheTree from './home/components/menuItems/WaterTheTree';
 import PlantPreservation from './home/components/menuItems/PlantPreservation';
 import PlantPackaging from './home/components/menuItems/PlantPackaging';
+import ChangePass from './account/components/ChangePass';
+import InfoAccount from './account/components/InfoAccount';
+import Calculator from './account/components/calculator/Calculator';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -93,6 +96,9 @@ export default RootComponent = function () {
                 <Stack.Screen name="WaterTheTree" component={WaterTheTree} />
                 <Stack.Screen name="PlantPreservation" component={PlantPreservation} />
                 <Stack.Screen name="PlantPackaging" component={PlantPackaging} />
+                <Stack.Screen name="ChangePass" component={ChangePass} />
+                <Stack.Screen name="InfoAccount" component={InfoAccount} />
+                <Stack.Screen name="Calculator" component={Calculator} />
             </Stack.Navigator>
         </NavigationContainer>
     )

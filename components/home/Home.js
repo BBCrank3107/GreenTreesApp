@@ -38,15 +38,11 @@ const Home = () => {
                 <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
                     <View style={styles.container}>
                         <ImageCarousel imageList={imageList} stepCarousel={stepCarousel} handleScroll={handleScroll} />
-                        <LinearGradient
-                            colors={['rgba(19,82,0,1)', 'rgba(35,255,0,1)']}
-                            start={{ x: 0, y: 0 }}
-                            end={{ x: 1, y: 1 }}
-                            locations={[0, 1]}
+                        <View
                             style={styles.titleContainer}
                         >
                             <Text style={styles.title}>Chăm sóc cây trồng</Text>
-                        </LinearGradient>
+                        </View>
                         <Container expandedRow={expandedRow} toggleRowExpansion={toggleRowExpansion} plantData={plantData} />
                     </View>
                 </ScrollView>
@@ -61,11 +57,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     titleContainer: {
-        width: '100%',
+        width: '90%',
         height: 80,
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 10,
+        backgroundColor: '#109672',
+        borderRadius: 10,
+        top: -10
     },
     title: {
         fontFamily: 'Merriweather-Bold',
