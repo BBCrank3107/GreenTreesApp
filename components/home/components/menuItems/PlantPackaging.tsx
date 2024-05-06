@@ -11,12 +11,17 @@ import {
 } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 
-const PlantTheTree = ({navigation}) => {
+interface RouteParams {
+    harvest: string;
+    preserve: string;
+}
+
+const PlantPackaging = ({ navigation }: any) => {
     const route = useRoute();
-    const { climate, land, target, time } = route.params;
+    const { harvest, preserve } = route.params as RouteParams;
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <ImageBackground source={require('../../images/images/bg1.jpg')} resizeMode='cover' style={{ height: '100%' }}>
+            <ImageBackground source={require('../../images/images/bg4.jpg')} resizeMode='cover' style={{ height: '100%' }}>
                 <View style={{ height: 50, width: '100%', backgroundColor: '#d9d9d9', flexDirection: 'row', alignItems: 'center' }}>
                     <TouchableOpacity
                         style={{ padding: 10 }}
@@ -29,16 +34,11 @@ const PlantTheTree = ({navigation}) => {
                 </View>
                 <ScrollView>
                     <View style={{ flexDirection: 'column', width: '100%', height: '100%', padding: 20 }}>
-                        <Text style={styles.h1}>I. Chọn giống và thời điểm trồng:</Text>
-                        <Text style={styles.h2}>1. Cách chọn giống:</Text>
-                        <Text style={styles.h3}>a. Điều kiện khí hậu:</Text>
-                        <Text style={styles.text}>{climate}</Text>
-                        <Text style={styles.h3}>b. Đặc điểm đất:</Text>
-                        <Text style={styles.text}>{land}</Text>
-                        <Text style={styles.h3}>c. Mục tiêu kinh doanh:</Text>
-                        <Text style={styles.text}>{target}</Text>
-                        <Text style={styles.h2}>2. Thời điểm trồng:</Text>
-                        <Text style={styles.text}>{time}</Text>
+                        <Text style={styles.h1}>IV. Thu hoạch và bảo quản:</Text>
+                        <Text style={styles.h2}>1. Thu hoạch:</Text>
+                        <Text style={styles.text}>{harvest}</Text>
+                        <Text style={styles.h2}>2. Bảo quản:</Text>
+                        <Text style={styles.text}>{preserve}</Text>
                     </View>
                 </ScrollView>
             </ImageBackground>
@@ -68,4 +68,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default PlantTheTree;
+export default PlantPackaging;

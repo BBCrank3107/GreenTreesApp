@@ -11,12 +11,17 @@ import {
 } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 
-const PlantPackaging = ({navigation}) => {
+interface RouteParams {
+    water: string;
+    fertilize: string;
+}
+
+const WaterTheTree = ({navigation}: any) => {
     const route = useRoute();
-    const { harvest, preserve } = route.params;
+    const { water, fertilize } = route.params as RouteParams;
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <ImageBackground source={require('../../images/images/bg4.jpg')} resizeMode='cover' style={{ height: '100%' }}>
+            <ImageBackground source={require('../../images/images/bg2.jpg')} resizeMode='cover' style={{ height: '100%' }}>
                 <View style={{ height: 50, width: '100%', backgroundColor: '#d9d9d9', flexDirection: 'row', alignItems: 'center' }}>
                     <TouchableOpacity
                         style={{ padding: 10 }}
@@ -29,11 +34,11 @@ const PlantPackaging = ({navigation}) => {
                 </View>
                 <ScrollView>
                     <View style={{ flexDirection: 'column', width: '100%', height: '100%', padding: 20 }}>
-                        <Text style={styles.h1}>IV. Thu hoạch và bảo quản:</Text>
-                        <Text style={styles.h2}>1. Thu hoạch:</Text>
-                        <Text style={styles.text}>{harvest}</Text>
-                        <Text style={styles.h2}>2. Bảo quản:</Text>
-                        <Text style={styles.text}>{preserve}</Text>
+                        <Text style={styles.h1}>II. Tưới nước và bón phân:</Text>
+                        <Text style={styles.h3}>a. Tưới nước:</Text>
+                        <Text style={styles.text}>{water}</Text>
+                        <Text style={styles.h3}>b. Bón phân:</Text>
+                        <Text style={styles.text}>{fertilize}</Text>
                     </View>
                 </ScrollView>
             </ImageBackground>
@@ -44,11 +49,6 @@ const PlantPackaging = ({navigation}) => {
 const styles = StyleSheet.create({
     h1: {
         fontSize: 24,
-        fontWeight: 'bold',
-        color: 'black'
-    },
-    h2: {
-        fontSize: 22,
         fontWeight: 'bold',
         color: 'black'
     },
@@ -63,4 +63,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default PlantPackaging;
+export default WaterTheTree;

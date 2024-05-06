@@ -7,7 +7,7 @@ import {
     StyleSheet,
 } from 'react-native';
 
-const Account = ({ navigation }) => {
+const Account = ({ navigation }: any) => {
     const menuItems = [
         {
             title: "Tính năng",
@@ -23,23 +23,27 @@ const Account = ({ navigation }) => {
         },
     ];
 
-    const [expandedItems, setExpandedItems] = useState({});
+    const [expandedItems, setExpandedItems] = useState<number[]>([]); // Change here
 
-    const handleItemPress = (index) => {
-        const isExpanded = expandedItems[index];
-        setExpandedItems({ ...expandedItems, [index]: !isExpanded });
+    const handleItemPress = (index: number) => {
+        const isExpanded = expandedItems.includes(index);
+        if (isExpanded) {
+            setExpandedItems(expandedItems.filter(item => item !== index));
+        } else {
+            setExpandedItems([...expandedItems, index]);
+        }
     };
 
     const handleCloseSubItems = () => {
-        setExpandedItems({});
+        setExpandedItems([]);
     };
 
-    const handleSubItemPress = (subItem) => {
+    const handleSubItemPress = (subItem: string) => {
         if (subItem === 'Đổi mật khẩu') {
             navigation.navigate('ChangePass');
-        }else if (subItem === 'Thông tin tài khoản') {
+        } else if (subItem === 'Thông tin tài khoản') {
             navigation.navigate('InfoAccount');
-        }else if (subItem === 'Máy tính') {
+        } else if (subItem === 'Máy tính') {
             navigation.navigate('Calculator');
         }
     };
@@ -64,7 +68,7 @@ const Account = ({ navigation }) => {
                         <TouchableOpacity
                             style={[
                                 styles.menuItem,
-                                expandedItems[index] && styles.activeItem,
+                                expandedItems.includes(index) && styles.activeItem,
                             ]}
                             onPress={() => handleItemPress(index)}
                         >
@@ -72,11 +76,11 @@ const Account = ({ navigation }) => {
                         </TouchableOpacity>
 
                         {/* Sub Items */}
-                        {expandedItems[index] &&
+                        {expandedItems.includes(index) &&
                             item.subItems.map((subItem, subIndex) => (
-                                <TouchableOpacity 
-                                    key={subIndex} 
-                                    style={styles.subItem} 
+                                <TouchableOpacity
+                                    key={subIndex}
+                                    style={styles.subItem}
                                     onPress={() => handleSubItemPress(subItem)}
                                 >
                                     <Text style={styles.subItemText}>{subItem}</Text>

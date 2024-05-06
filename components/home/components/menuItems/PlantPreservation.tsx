@@ -11,12 +11,18 @@ import {
 } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 
-const WaterTheTree = ({navigation}) => {
+interface RouteParams {
+    grass: string;
+    insect: string;
+    disease: string;
+}
+
+const PlantPreservation = ({navigation}: any) => {
     const route = useRoute();
-    const { water, fertilize } = route.params;
+    const { grass, insect, disease } = route.params as RouteParams;
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <ImageBackground source={require('../../images/images/bg2.jpg')} resizeMode='cover' style={{ height: '100%' }}>
+            <ImageBackground source={require('../../images/images/bg3.jpg')} resizeMode='cover' style={{ height: '100%' }}>
                 <View style={{ height: 50, width: '100%', backgroundColor: '#d9d9d9', flexDirection: 'row', alignItems: 'center' }}>
                     <TouchableOpacity
                         style={{ padding: 10 }}
@@ -29,11 +35,11 @@ const WaterTheTree = ({navigation}) => {
                 </View>
                 <ScrollView>
                     <View style={{ flexDirection: 'column', width: '100%', height: '100%', padding: 20 }}>
-                        <Text style={styles.h1}>II. Tưới nước và bón phân:</Text>
-                        <Text style={styles.h3}>a. Tưới nước:</Text>
-                        <Text style={styles.text}>{water}</Text>
-                        <Text style={styles.h3}>b. Bón phân:</Text>
-                        <Text style={styles.text}>{fertilize}</Text>
+                        <Text style={styles.h1}>III. Cách bảo vệ cây:</Text>
+                        <Text style={styles.text}>- Kiểm soát cỏ: {grass}</Text>
+                        <Text style={styles.text}>- Kiểm soát côn trùng: {insect}</Text>
+                        <Text style={styles.h2}>* Dấu hiệu bệnh trên cây và cách khắc phục</Text>
+                        <Text style={styles.text}>{disease}</Text>
                     </View>
                 </ScrollView>
             </ImageBackground>
@@ -44,6 +50,11 @@ const WaterTheTree = ({navigation}) => {
 const styles = StyleSheet.create({
     h1: {
         fontSize: 24,
+        fontWeight: 'bold',
+        color: 'black'
+    },
+    h2: {
+        fontSize: 22,
         fontWeight: 'bold',
         color: 'black'
     },
@@ -58,4 +69,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default WaterTheTree;
+export default PlantPreservation;

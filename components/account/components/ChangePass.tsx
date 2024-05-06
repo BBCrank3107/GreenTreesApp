@@ -11,7 +11,7 @@ import {
   Image
 } from "react-native";
 
-const ChangePass = ({ navigation }) => {
+const ChangePass = ({ navigation }: any) => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -35,7 +35,7 @@ const ChangePass = ({ navigation }) => {
         <Text style={{ fontSize: 20 }}>Đổi lại mật khẩu</Text>
       </View>
       <ScrollView contentContainerStyle={styles.scrollView}>
-        <Text h4 style={styles.title}>
+        <Text style={styles.title}>
           Cập nhật mật khẩu
         </Text>
         <View style={{ alignItems: "center" }}>
@@ -48,7 +48,7 @@ const ChangePass = ({ navigation }) => {
               <Text style={{ fontSize: 18 }}>{pwdHidden ? 'HIỆN' : 'ẨN'}</Text>
             </TouchableOpacity>
           </View>
-          <View style={styles.inputContainer}>
+          <View>
             <TextInput
               style={styles.input}
               placeholder="Nhập mật khẩu hiện tại"
@@ -77,7 +77,6 @@ const ChangePass = ({ navigation }) => {
           <Text style={styles.buttonText}>Cập nhật</Text>
         </TouchableOpacity>
       </ScrollView>
-      <StatusBar style="auto" />
     </KeyboardAvoidingView>
   );
 };
@@ -102,7 +101,6 @@ const styles = StyleSheet.create({
   },
   note: {
     marginBottom: 10,
-    color: "gray",
     fontSize: 18,
     color: 'black'
   },
