@@ -33,19 +33,17 @@ const Home = () => {
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <ImageBackground source={require('./images/images/bg5.jpg')} resizeMode='cover' style={{height: '100%'}}>
-                <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-                    <View style={styles.container}>
-                        <ImageCarousel imageList={imageList} stepCarousel={stepCarousel} handleScroll={handleScroll} />
-                        <View
-                            style={styles.titleContainer}
-                        >
-                            <Text style={styles.title}>Chăm sóc cây trồng</Text>
-                        </View>
-                        <Container expandedRow={expandedRow} toggleRowExpansion={toggleRowExpansion} plantData={plantData} />
+            <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+                <View style={styles.container}>
+                    <ImageCarousel imageList={imageList} stepCarousel={stepCarousel} handleScroll={handleScroll} />
+                    <View
+                        style={styles.titleContainer}
+                    >
+                        <Text style={styles.title}>Chăm sóc cây trồng</Text>
                     </View>
-                </ScrollView>
-            </ImageBackground>
+                    <Container expandedRow={expandedRow} toggleRowExpansion={toggleRowExpansion} plantData={plantData} />
+                </View>
+            </ScrollView>
         </SafeAreaView>
     );
 };
@@ -57,12 +55,13 @@ const styles = StyleSheet.create({
     },
     titleContainer: {
         width: '90%',
-        height: 80,
+        height: 60,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#109672',
         borderRadius: 10,
-        top: -10
+        top: -10,
+        elevation: 20,
     },
     title: {
         fontFamily: 'Merriweather-Bold',

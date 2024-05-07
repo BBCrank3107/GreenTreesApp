@@ -10,6 +10,7 @@ import {
   Text,
   Image
 } from "react-native";
+import BackBtn from "../../backBtn";
 
 const ChangePass = ({ navigation }: any) => {
   const [currentPassword, setCurrentPassword] = useState("");
@@ -24,16 +25,7 @@ const ChangePass = ({ navigation }: any) => {
 
   return (
     <KeyboardAvoidingView style={styles.container}>
-      <View style={{ height: 50, width: '100%', backgroundColor: '#d9d9d9', flexDirection: 'row', alignItems: 'center' }}>
-        <TouchableOpacity
-          style={{ padding: 10 }}
-          onPress={() => {
-            navigation.navigate('Account')
-          }}>
-          <Image style={{ height: 26, width: 26 }} source={require('../../../images/icons/back.png')} />
-        </TouchableOpacity>
-        <Text style={{ fontSize: 20 }}>Đổi lại mật khẩu</Text>
-      </View>
+      <BackBtn onPress={() => {navigation.navigate('Account')}}></BackBtn>
       <ScrollView contentContainerStyle={styles.scrollView}>
         <Text style={styles.title}>
           Cập nhật mật khẩu

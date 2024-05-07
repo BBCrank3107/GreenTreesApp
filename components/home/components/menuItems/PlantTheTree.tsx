@@ -10,6 +10,7 @@ import {
     Image
 } from 'react-native';
 import { useRoute } from '@react-navigation/native';
+import BackBtn from '../../../backBtn';
 
 interface RouteParams {
     climate: string;
@@ -18,34 +19,29 @@ interface RouteParams {
     time: string
 }
 
-const PlantTheTree = ({navigation}: any) => {
+const PlantTheTree = ({ navigation }: any) => {
     const route = useRoute();
     const { climate, land, target, time } = route.params as RouteParams;
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ImageBackground source={require('../../images/images/bg1.jpg')} resizeMode='cover' style={{ height: '100%' }}>
-                <View style={{ height: 50, width: '100%', backgroundColor: '#d9d9d9', flexDirection: 'row', alignItems: 'center' }}>
-                    <TouchableOpacity
-                        style={{ padding: 10 }}
-                        onPress={() => {
-                            navigation.navigate('HomeTabs')
-                        }}>
-                        <Image style={{ height: 26, width: 26 }} source={require('../../../../images/icons/back.png')} />
-                    </TouchableOpacity>
-                    <Text style={{ fontSize: 20 }}>Thông tin</Text>
-                </View>
                 <ScrollView>
-                    <View style={{ flexDirection: 'column', width: '100%', height: '100%', padding: 20 }}>
-                        <Text style={styles.h1}>I. Chọn giống và thời điểm trồng:</Text>
-                        <Text style={styles.h2}>1. Cách chọn giống:</Text>
-                        <Text style={styles.h3}>a. Điều kiện khí hậu:</Text>
-                        <Text style={styles.text}>{climate}</Text>
-                        <Text style={styles.h3}>b. Đặc điểm đất:</Text>
-                        <Text style={styles.text}>{land}</Text>
-                        <Text style={styles.h3}>c. Mục tiêu kinh doanh:</Text>
-                        <Text style={styles.text}>{target}</Text>
-                        <Text style={styles.h2}>2. Thời điểm trồng:</Text>
-                        <Text style={styles.text}>{time}</Text>
+                    <BackBtn onPress={() => navigation.navigate('HomeTabs')} />
+
+                    <View style={styles.container}>
+                        <View style={styles.content}>
+                            <Image source={require('../../images/images/menu1.jpg')} style={styles.img}/>
+                            <Text style={styles.h1}>Chọn giống và thời điểm trồng:</Text>
+                            <Text style={styles.h2}>1. Cách chọn giống:</Text>
+                            <Text style={styles.h3}>a. Điều kiện khí hậu:</Text>
+                            <Text style={styles.text}>{climate}</Text>
+                            <Text style={styles.h3}>b. Đặc điểm đất:</Text>
+                            <Text style={styles.text}>{land}</Text>
+                            <Text style={styles.h3}>c. Mục tiêu kinh doanh:</Text>
+                            <Text style={styles.text}>{target}</Text>
+                            <Text style={styles.h2}>2. Thời điểm trồng:</Text>
+                            <Text style={styles.text}>{time}</Text>
+                        </View>
                     </View>
                 </ScrollView>
             </ImageBackground>
@@ -54,6 +50,22 @@ const PlantTheTree = ({navigation}: any) => {
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        borderRadius: 20,
+        overflow: 'hidden',
+        backgroundColor: 'rgba(255, 255, 255, 1)',
+        marginHorizontal: 20,
+        marginBottom: 20,
+        elevation: 10
+    },
+    content: {
+        padding: 20,
+    },
+    img: {
+        width: '100%',
+        height: 300
+    },
     h1: {
         fontSize: 24,
         fontWeight: 'bold',

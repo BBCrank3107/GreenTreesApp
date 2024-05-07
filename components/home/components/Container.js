@@ -104,10 +104,15 @@ const Container = ({ expandedRow, toggleRowExpansion, plantData }) => {
 const styles = StyleSheet.create({
     outerContainer: {
         width: '100%',
+        height: '100%',
         justifyContent: 'center',
         alignItems: 'center',
         flex: 1,
-        marginBottom: 30
+        paddingBottom: 30,
+        backgroundColor: 'white',
+        borderTopStartRadius: 25,
+        borderTopEndRadius: 25,
+        elevation: 20,
     },
     innerContainer: {
         width: '90%',
@@ -122,7 +127,8 @@ const styles = StyleSheet.create({
         width: '48%',
         height: 250,
         borderRadius: 10,
-        overflow: 'hidden'
+        overflow: 'hidden',
+        elevation: 5,
     },
     expandedCard: {
         height: 250,
