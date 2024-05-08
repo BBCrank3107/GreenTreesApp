@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
+import { globalColors } from '../../styles/Colors';
+import BackBtn from '../backBtn';
 
-const Price = () => {
+const Price = ({ navigation }) => {
     const [data, setData] = useState([]);
     const [currentTime, setCurrentTime] = useState(new Date());
     const getCurrentDate = () => {
@@ -42,7 +44,7 @@ const Price = () => {
 
     const renderPlantItem = ({ item }) => {
         const fluctuationColor = item.Fluctuations < 0 ? styles.redText : styles.greenText;
-    
+
         if (item.AVGPriceNow !== null && item.AVGPriceYesterday !== null) {
             return (
                 <View style={styles.row}>
@@ -75,31 +77,34 @@ const Price = () => {
     );
 
     return (
-        <View style={styles.container}>
-            <View style={styles.containerTop}>
-                <Text style={styles.title}>
-                    Giá cả hôm nay - {getCurrentDate()}
-                </Text>
+        <View style={{flex: 1, backgroundColor: '#fffff3',}}>
+            <BackBtn onPress={() => { navigation.navigate('Account') }}></BackBtn>
+            <View style={styles.container}>
+                <View style={styles.containerTop}>
+                    <Text style={styles.title}>
+                        Giá cả hôm nay - {getCurrentDate()}
+                    </Text>
+                </View>
+                <View style={{ marginBottom: 10 }}>
+                    <Text style={{ textAlign: 'right', fontSize: 16 }}>
+                        {currentTime.toLocaleTimeString()}
+                    </Text>
+                </View>
+                <FlatList
+                    data={Object.keys(data).map(categoryName => ({ categoryName, plants: data[categoryName] }))}
+                    renderItem={renderCategoryCard}
+                    keyExtractor={(item) => item.categoryName}
+                />
             </View>
-            <View style={{marginBottom: 10}}>
-                <Text style={{textAlign: 'right', fontSize: 16}}>
-                    {currentTime.toLocaleTimeString()}
-                </Text>
-            </View>
-            <FlatList
-                data={Object.keys(data).map(categoryName => ({ categoryName, plants: data[categoryName] }))}
-                renderItem={renderCategoryCard}
-                keyExtractor={(item) => item.categoryName}
-            />
         </View>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        padding: 20,
-        backgroundColor: '#fffff3',
+        width: '100%',
+        paddingHorizontal: 20,
+        paddingBottom: 20,
     },
     containerTop: {
         justifyContent: 'center',
@@ -110,29 +115,22 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 24,
         marginBottom: 10,
-        color: 'black',
+        color: globalColors.mainGreen,
     },
     card: {
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#fff',
-        borderRadius: 10,
+        backgroundColor: 'white',
+        borderRadius: 15,
         padding: 15,
         marginBottom: 20,
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
+        elevation: 2,
     },
     titleTable: {
         fontWeight: 'bold',
         fontSize: 18,
         marginBottom: 10,
-        color: 'black',
+        color: globalColors.mainGreen,
     },
     plantName: {
         flex: 1,

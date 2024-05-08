@@ -12,9 +12,10 @@ import {globalColors} from '../styles/Colors'
 import Login from './login/Login';
 import Home from './home/Home';
 import Weather from './weather/Weather';
-import Price from './price/Price';
 import Account from './account/Account';
 import Shop from './shop/Shop';
+import ShopCart from './shopCart/ShopCart';
+import Price from './price/Price';
 import Container from './home/components/Container';
 import PlantTheTree from './home/components/menuItems/PlantTheTree';
 import WaterTheTree from './home/components/menuItems/WaterTheTree';
@@ -60,7 +61,7 @@ function MyTabs() {
                 tabBarIcon: ({ focused }) => (
                     <View style={[styles.backgroundIcon, tabBarIconStyle(focused)]}>
                         <Image
-                            source={require('../images/icons/home.png')}
+                            source={require('../images/icons/plant.png')}
                             style={[styles.tabBarIcon, tabBarIconTintColor(focused)]}
                             resizeMode='stretch'
                         />
@@ -83,7 +84,7 @@ function MyTabs() {
                     <View style={[styles.main, { backgroundColor: focused ? globalColors.mainGreen : 'white' }]}>
                         <View style={[{ width: 54, height: 54, borderRadius: 27, justifyContent: 'center', alignItems: 'center' }, tabBarIconStyle(focused)]}>
                             <Image
-                                source={require('../images/icons/shop.png')}
+                                source={require('../images/icons/home.png')}
                                 style={[styles.tabBarIcon, tabBarIconTintColor(focused), styles.center]}
                                 resizeMode='stretch'
                             />
@@ -91,11 +92,11 @@ function MyTabs() {
                     </View>
                 ),
             }} />
-            <Tab.Screen name="Price" component={Price} options={{
+            <Tab.Screen name="ShopCart" component={ShopCart} options={{
                 tabBarIcon: ({ focused }) => (
                     <View style={[styles.backgroundIcon, tabBarIconStyle(focused)]}>
                         <Image
-                            source={require('../images/icons/price.png')}
+                            source={require('../images/icons/cart.png')}
                             style={[styles.tabBarIcon, tabBarIconTintColor(focused)]}
                             resizeMode='stretch'
                         />
@@ -131,6 +132,8 @@ export default RootComponent = function () {
                 <Stack.Screen name="ChangePass" component={ChangePass} />
                 <Stack.Screen name="InfoAccount" component={InfoAccount} />
                 <Stack.Screen name="Calculator" component={Calculator} />
+                <Stack.Screen name="ShopCart" component={ShopCart} />
+                <Stack.Screen name="Price" component={Price} />
             </Stack.Navigator>
         </NavigationContainer>
     )

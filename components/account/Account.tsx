@@ -12,7 +12,7 @@ const Account = ({ navigation }: any) => {
     const menuItems = [
         {
             title: "Tính năng",
-            subItems: ["Máy tính"],
+            subItems: ["Máy tính", "Giá cả thị trường"],
         },
         {
             title: "Tài khoản và bảo mật",
@@ -24,7 +24,7 @@ const Account = ({ navigation }: any) => {
         },
     ];
 
-    const [expandedItems, setExpandedItems] = useState<number[]>([]); // Change here
+    const [expandedItems, setExpandedItems] = useState<number[]>([]);
 
     const handleItemPress = (index: number) => {
         const isExpanded = expandedItems.includes(index);
@@ -46,6 +46,8 @@ const Account = ({ navigation }: any) => {
             navigation.navigate('InfoAccount');
         } else if (subItem === 'Máy tính') {
             navigation.navigate('Calculator');
+        } else if (subItem === 'Giá cả thị trường') {
+            navigation.navigate('Price');
         }
     };
 
@@ -109,7 +111,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     header: {
-        backgroundColor: '#f2f2f2',
+        backgroundColor: globalColors.mainGreen,
         padding: 20,
         height: "20%",
         justifyContent: "center",
@@ -125,13 +127,14 @@ const styles = StyleSheet.create({
         width: 60,
         height: 60,
         borderRadius: 30,
-        backgroundColor: 'gray',
+        backgroundColor: 'white',
         marginRight: 10,
     },
     userName: {
         // marginTop: 20,
         fontSize: 25,
         fontWeight: "bold",
+        color: 'white'
     },
     scrollView: {
         flex: 1,
