@@ -1,10 +1,13 @@
 import React, { Component } from 'react'
 import {
-    Image, StyleSheet
+    Image, StyleSheet,
+    View
 } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
+import {globalColors} from '../styles/Colors'
 
 import Login from './login/Login';
 import Home from './home/Home';
@@ -25,61 +28,90 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 function MyTabs() {
+    const tabBarIconStyle = (focused) => ({
+        backgroundColor: focused ? 'white' : globalColors.mainGreen,
+        elevation: focused ? 5 : 0
+    });
+
+    const tabBarIconTintColor = (focused) => ({
+        tintColor: focused ? 'gray' : 'white'
+    });
+
     return (
         <Tab.Navigator
             screenOptions={{
                 headerShown: false,
-                tabBarStyle: [{ display: 'flex' }, null]
+                // tabBarStyle: [{ display: 'flex' }, null],
+                tabBarStyle: {
+                    position: 'absolute',
+                    bottom: 0,
+                    right: 0,
+                    left: 0,
+                    elevation: 10,
+                    height: 60,
+                    borderRadius: 30,
+                    marginBottom: 10,
+                    marginHorizontal: 10,
+                    backgroundColor: globalColors.mainGreen
+                },
+                tabBarShowLabel: false,
             }}>
             <Tab.Screen name="Home" component={Home} options={{
                 tabBarIcon: ({ focused }) => (
-                    <Image
-                        source={require('../images/icons/home.png')}
-                        style={[styles.tabBarIcon, { tintColor: focused ? 'black' : 'gray' }]}
-                        resizeMode='stretch'
-                    />
+                    <View style={[styles.backgroundIcon, tabBarIconStyle(focused)]}>
+                        <Image
+                            source={require('../images/icons/home.png')}
+                            style={[styles.tabBarIcon, tabBarIconTintColor(focused)]}
+                            resizeMode='stretch'
+                        />
+                    </View>
                 ),
-                tabBarLabel: ''
             }} />
             <Tab.Screen name="Weather" component={Weather} options={{
                 tabBarIcon: ({ focused }) => (
-                    <Image
-                        source={require('../images/icons/weather.png')}
-                        style={[styles.tabBarIcon, { tintColor: focused ? 'black' : 'gray' }]}
-                        resizeMode='stretch'
-                    />
+                    <View style={[styles.backgroundIcon, tabBarIconStyle(focused)]}>
+                        <Image
+                            source={require('../images/icons/weather.png')}
+                            style={[styles.tabBarIcon, tabBarIconTintColor(focused)]}
+                            resizeMode='stretch'
+                        />
+                    </View>
                 ),
-                tabBarLabel: ''
-            }} />
-            <Tab.Screen name="Price" component={Price} options={{
-                tabBarIcon: ({ focused }) => (
-                    <Image
-                        source={require('../images/icons/price.png')}
-                        style={[styles.tabBarIcon, { tintColor: focused ? 'black' : 'gray' }]}
-                        resizeMode='stretch'
-                    />
-                ),
-                tabBarLabel: ''
             }} />
             <Tab.Screen name="Shop" component={Shop} options={{
                 tabBarIcon: ({ focused }) => (
-                    <Image
-                        source={require('../images/icons/shop.png')}
-                        style={[styles.tabBarIcon, { tintColor: focused ? 'black' : 'gray' }]}
-                        resizeMode='stretch'
-                    />
+                    <View style={[styles.main, { backgroundColor: focused ? globalColors.mainGreen : 'white' }]}>
+                        <View style={[{ width: 54, height: 54, borderRadius: 27, justifyContent: 'center', alignItems: 'center' }, tabBarIconStyle(focused)]}>
+                            <Image
+                                source={require('../images/icons/shop.png')}
+                                style={[styles.tabBarIcon, tabBarIconTintColor(focused), styles.center]}
+                                resizeMode='stretch'
+                            />
+                        </View>
+                    </View>
                 ),
-                tabBarLabel: ''
+            }} />
+            <Tab.Screen name="Price" component={Price} options={{
+                tabBarIcon: ({ focused }) => (
+                    <View style={[styles.backgroundIcon, tabBarIconStyle(focused)]}>
+                        <Image
+                            source={require('../images/icons/price.png')}
+                            style={[styles.tabBarIcon, tabBarIconTintColor(focused)]}
+                            resizeMode='stretch'
+                        />
+                    </View>
+                ),
             }} />
             <Tab.Screen name="Account" component={Account} options={{
                 tabBarIcon: ({ focused }) => (
-                    <Image
-                        source={require('../images/icons/account.png')}
-                        style={[styles.tabBarIcon, { tintColor: focused ? 'black' : 'gray' }]}
-                        resizeMode='stretch'
-                    />
+                    <View style={[styles.backgroundIcon, tabBarIconStyle(focused)]}>
+                        <Image
+                            source={require('../images/icons/account.png')}
+                            style={[styles.tabBarIcon, tabBarIconTintColor(focused)]}
+                            resizeMode='stretch'
+                        />
+                    </View>
                 ),
-                tabBarLabel: ''
             }} />
         </Tab.Navigator>
     );
@@ -106,8 +138,31 @@ export default RootComponent = function () {
 
 const styles = StyleSheet.create({
     tabBarIcon: {
-        width: 26,
-        height: 26,
-        marginTop: 15,
+        width: 28,
+        height: 28,
+        alignItems: 'center',
+        justifyContent: 'center'
     },
+    main: {
+        width: 60,
+        height: 60,
+        borderRadius: 30,
+        backgroundColor: 'white',
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'absolute',
+        top: -15,
+        elevation: 10
+    },
+    center: {
+        width: 32,
+        height: 32
+    },
+    backgroundIcon: {
+        width: 50,
+        height: 50,
+        borderRadius: 25,
+        justifyContent: 'center',
+        alignItems: 'center',
+    }
 });

@@ -3,6 +3,7 @@ import { SafeAreaView, ScrollView, View, Text, StyleSheet, ImageBackground } fro
 import useAutoScroll from './js/autoScroll';
 import ImageCarousel from './components/ImageCarousel';
 import Container from './components/Container';
+import { globalColors } from '../../styles/Colors';
 
 const Home = () => {
     const { imageList, stepCarousel, handleScroll } = useAutoScroll();
@@ -58,7 +59,7 @@ const styles = StyleSheet.create({
         height: 60,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#109672',
+        backgroundColor: globalColors.mainGreen,
         borderRadius: 10,
         top: -10,
         elevation: 20,

@@ -11,6 +11,7 @@ import {
   Image
 } from "react-native";
 import BackBtn from "../../backBtn";
+import { globalColors } from "../../../styles/Colors";
 
 const ChangePass = ({ navigation }: any) => {
   const [currentPassword, setCurrentPassword] = useState("");
@@ -99,7 +100,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     height: 40,
-    borderColor: "#109672",
+    borderColor: globalColors.mainGreen,
     borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 10,
@@ -107,7 +108,7 @@ const styles = StyleSheet.create({
     fontSize: 16
   },
   button: {
-    backgroundColor: "#109672",
+    backgroundColor: globalColors.mainGreen,
     paddingVertical: 10,
     borderRadius: 25,
     alignItems: "center",

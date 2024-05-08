@@ -8,6 +8,7 @@ import {
     StatusBar,
     Image
 } from "react-native";
+import { globalColors } from "../../styles/Colors";
 const LOGIN = "LOGIN";
 const SIGN_UP = "SIGN_UP";
 
@@ -179,7 +180,7 @@ const styles = StyleSheet.create({
     under: {
         width: "100%",
         flex: 1,
-        backgroundColor: "#4D8D6E",
+        backgroundColor: globalColors.mainGreen,
         justifyContent: "center",
         alignItems: "center",
     },
@@ -211,7 +212,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     cl: {
-        color: "#4D8D6E",
+        color: globalColors.mainGreen,
         fontSize: 20,
     },
     brightbar: {
@@ -219,7 +220,7 @@ const styles = StyleSheet.create({
         bottom: 0,
         height: 3,
         width: "100%",
-        backgroundColor: "#4D8D6E",
+        backgroundColor: globalColors.mainGreen,
     },
 
     //  body
@@ -299,7 +300,7 @@ const styles = StyleSheet.create({
     btn: {
         width: 330,
         height: 60,
-        backgroundColor: "#109672",
+        backgroundColor: globalColors.mainGreen,
         marginLeft: 30,
         borderRadius: 70,
         justifyContent: "center",

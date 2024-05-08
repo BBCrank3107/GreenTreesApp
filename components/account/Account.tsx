@@ -6,6 +6,7 @@ import {
     TouchableOpacity,
     StyleSheet,
 } from 'react-native';
+import { globalColors } from '../../styles/Colors';
 
 const Account = ({ navigation }: any) => {
     const menuItems = [
@@ -91,12 +92,12 @@ const Account = ({ navigation }: any) => {
             </ScrollView>
 
             {/* Logout Button */}
-            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+            <View style={{ justifyContent: 'center', alignItems: 'center', marginBottom: 80 }}>
                 <TouchableOpacity style={styles.logoutButton}
                     onPress={() => {
                         navigation.navigate('Login')
                     }}>
-                    <Text style={styles.logoutButtonText}>Log out</Text>
+                    <Text style={styles.logoutButtonText}>Đăng xuất</Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -164,7 +165,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 30,
-        backgroundColor: "#109672",
+        backgroundColor: globalColors.mainGreen,
         marginBottom: 30,
     },
     logoutButtonText: {
