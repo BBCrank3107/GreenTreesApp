@@ -4,6 +4,7 @@ import useAutoScroll from './js/autoScroll';
 import ImageCarousel from './components/ImageCarousel';
 import Container from './components/Container';
 import { globalColors } from '../../styles/Colors';
+import { ipAddress } from '../../ip/ip';
 
 const Home = () => {
     const { imageList, stepCarousel, handleScroll } = useAutoScroll();
@@ -21,7 +22,7 @@ const Home = () => {
 
     const fetchData = async () => {
         try {
-            const response = await fetch('http://192.168.1.3:3000/infor');
+            const response = await fetch(`${ipAddress}/infor`);
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }

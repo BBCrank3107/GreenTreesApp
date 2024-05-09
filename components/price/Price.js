@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
 import { globalColors } from '../../styles/Colors';
 import BackBtn from '../backBtn';
+import { ipAddress } from '../../ip/ip';
 
 const Price = ({ navigation }) => {
     const [data, setData] = useState([]);
@@ -21,7 +22,7 @@ const Price = ({ navigation }) => {
 
     const fetchData = async () => {
         try {
-            const response = await fetch('http://192.168.1.3:3000/category/plants');
+            const response = await fetch(`${ipAddress}/category/plants`);
             const jsonData = await response.json();
 
             const groupedData = groupByCategoryName(jsonData);

@@ -1,22 +1,28 @@
-import React, { Component } from 'react';
+import React from "react";
 import {
-    SafeAreaView,
-    View,
-    Text,
-    TouchableOpacity,
-} from 'react-native';
+    StyleSheet,
 
-const Shop = ({navigation}) => {
+    ScrollView,
+} from "react-native";
+import Header from "./components/Header";
+import Categories from "./components/Categories";
+import Product from "./components/Product";
 
+export default function Shop() {
     return (
-        <SafeAreaView style={{flex: 1}}>
-            <View style={{flexDirection:'column', width: '100%', height: '100%'}}>
-                <View style={{width: '100%', height: "50%", justifyContent:'center', alignItems: 'center'}}>
-                    <Text style={{fontSize: 30, fontWeight: 'bold'}}>Shop Screen</Text>
-                </View>
-            </View>
-        </SafeAreaView>
+        <ScrollView style={styles.container}>
+            <Header />
+
+            <Categories />
+
+            <Product />
+        </ScrollView>
     );
 }
 
-export default Shop;
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: "#fff",
+    },
+});
