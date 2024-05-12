@@ -76,6 +76,18 @@ app.get('/category/plants', (req, res) => {
     });
 });
 
+// Select data product
+app.get('/product', (req, res) => {
+    const sql = `SELECT * FROM product`;
+    db.query(sql, (err, result) => {
+        if (err) {
+            res.status(500).send({ message: 'Error retrieving data' });
+            throw err;
+        }
+        res.status(200).send(result);
+    });
+});
+
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });

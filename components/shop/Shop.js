@@ -8,7 +8,7 @@ import Header from "./components/Header";
 import Categories from "./components/Categories";
 import Product from "./components/Product";
 
-export default function Shop() {
+const Shop = () => {
     return (
         <ScrollView style={styles.container}>
             <Header />
@@ -19,6 +19,8 @@ export default function Shop() {
         </ScrollView>
     );
 }
+
+export default Shop;
 
 const styles = StyleSheet.create({
     container: {

@@ -24,6 +24,7 @@ import PlantPackaging from './home/components/menuItems/PlantPackaging';
 import ChangePass from './account/components/ChangePass';
 import InfoAccount from './account/components/InfoAccount';
 import Calculator from './account/components/calculator/Calculator';
+import InfoProduct from './shop/InfoProduct';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -42,7 +43,6 @@ function MyTabs() {
         <Tab.Navigator
             screenOptions={{
                 headerShown: false,
-                // tabBarStyle: [{ display: 'flex' }, null],
                 tabBarStyle: {
                     position: 'absolute',
                     bottom: 0,
@@ -134,6 +134,7 @@ export default RootComponent = function () {
                 <Stack.Screen name="Calculator" component={Calculator} />
                 <Stack.Screen name="ShopCart" component={ShopCart} />
                 <Stack.Screen name="Price" component={Price} />
+                <Stack.Screen name="InfoProduct" component={InfoProduct} />
             </Stack.Navigator>
         </NavigationContainer>
     )

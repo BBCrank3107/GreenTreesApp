@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Image, TextInput, StatusBar, Text, StyleSheet } from 'react-native';
+import { globalColors } from '../../../styles/Colors';
 
 const Header = () => {
     return (
@@ -20,7 +21,7 @@ const Header = () => {
             </View>
             <StatusBar style="auto" />
             <View style={styles.title}>
-                <Text style={styles.titleH1}>CÂY TRỒNG XANH</Text>
+                <Text style={styles.titleH1}>CÂY GIỐNG XANH</Text>
             </View>
             <View style={styles.areaInput}>
                 <Image
@@ -75,7 +76,7 @@ const styles = StyleSheet.create({
     titleH1: {
         fontSize: 22,
         fontWeight: "600",
-        color: "rgb(23, 104, 68)",
+        color: globalColors.mainGreen,
         marginBottom: 5,
     },
     areaInput: {
@@ -84,7 +85,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         borderWidth: 1.3,
-        borderColor: "rgb(35, 135, 84)",
+        borderColor: globalColors.mainGreen,
         borderRadius: 15,
         paddingHorizontal: 20,
         marginBottom: 20,

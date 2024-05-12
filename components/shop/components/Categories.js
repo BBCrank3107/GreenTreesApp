@@ -1,12 +1,33 @@
-import React, { useState } from 'react'
-import { Text, ScrollView, TouchableOpacity, StyleSheet, View } from 'react-native'
+import React, { useState, useEffect } from 'react';
+import { Text, ScrollView, TouchableOpacity, StyleSheet, View } from 'react-native';
+import { globalColors } from '../../../styles/Colors';
+import { ipAddress } from '../../../ip/ip';
 
 const Categories = () => {
-    const [selectedCategory, setSelectedCategory] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState("All");
+    const [categoriesData, setCategoriesData] = useState([]);
 
     const handleCategoryPress = (category) => {
         setSelectedCategory(category);
     };
+
+    useEffect(() => {
+        fetchData();
+    }, [])
+
+    const fetchData = async () => {
+        try {
+            const response = await fetch(`${ipAddress}/category`);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            setCategoriesData(data);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+
     return (
         <View>
             <View style={styles.category}>
@@ -17,7 +38,7 @@ const Categories = () => {
                             style={[
                                 styles.btncate,
                                 selectedCategory === "All" && {
-                                    backgroundColor: "rgb(25, 108, 65)",
+                                    backgroundColor: globalColors.mainGreen,
                                 },
                             ]}
                             onPress={() => handleCategoryPress("All")}
@@ -31,60 +52,29 @@ const Categories = () => {
                                 All
                             </Text>
                         </TouchableOpacity>
-                        <TouchableOpacity
-                            style={[
-                                styles.btncate,
-                                selectedCategory === "AnQua" && {
-                                    backgroundColor: "rgb(25, 108, 65)",
-                                },
-                            ]}
-                            onPress={() => handleCategoryPress("AnQua")}
-                        >
-                            <Text
+                        
+                        {categoriesData.map((category, index) => (
+                            <TouchableOpacity
+                                key={category.CategoryID}
                                 style={[
-                                    styles.textcategrory,
-                                    selectedCategory === "AnQua" && { color: "white" },
+                                    styles.btncate,
+                                    selectedCategory === category.CategoryName && {
+                                        backgroundColor: globalColors.mainGreen,
+                                    },
+                                    index === categoriesData.length - 1 && { marginRight: 15 }, // Kiểm tra xem có phải phần tử cuối cùng không
                                 ]}
+                                onPress={() => handleCategoryPress(category.CategoryName)}
                             >
-                                Cây ăn quả
-                            </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={[
-                                styles.btncate,
-                                selectedCategory === "CongNghiep" && {
-                                    backgroundColor: "rgb(25, 108, 65)",
-                                },
-                            ]}
-                            onPress={() => handleCategoryPress("CongNghiep")}
-                        >
-                            <Text
-                                style={[
-                                    styles.textcategrory,
-                                    selectedCategory === "CongNghiep" && { color: "white" },
-                                ]}
-                            >
-                                Cây công nghiệp
-                            </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={[
-                                styles.btncate,
-                                selectedCategory === "LuongThuc" && {
-                                    backgroundColor: "rgb(25, 108, 65)",
-                                },
-                            ]}
-                            onPress={() => handleCategoryPress("LuongThuc")}
-                        >
-                            <Text
-                                style={[
-                                    styles.textcategrory,
-                                    selectedCategory === "LuongThuc" && { color: "white" },
-                                ]}
-                            >
-                                Cây lương thực
-                            </Text>
-                        </TouchableOpacity>
+                                <Text
+                                    style={[
+                                        styles.textcategrory,
+                                        selectedCategory === category.CategoryName && { color: "white" },
+                                    ]}
+                                >
+                                    {category.CategoryName}
+                                </Text>
+                            </TouchableOpacity>
+                        ))}
                     </View>
                 </ScrollView>
             </View>
@@ -99,16 +89,18 @@ const styles = StyleSheet.create({
         width: "100%",
         height: 90,
         flexDirection: "column",
+        marginBottom: 5
     },
     textCate: {
-        height: "30%",
-        marginLeft: 20,
-        fontSize: 22,
+        height: "40%",
+        marginLeft: 15,
+        fontSize: 24,
         fontWeight: "600",
         marginBottom: 10,
+        color: globalColors.mainGreen
     },
     showCategory: {
-        height: "80%",
+        height: "100%",
         flexDirection: "row",
         alignItems: "center",
     },
@@ -116,10 +108,11 @@ const styles = StyleSheet.create({
         marginLeft: 15,
         padding: 12,
         borderRadius: 20,
-        backgroundColor: " rgb(241, 244, 242)",
+        backgroundColor: "rgb(241, 244, 242)",
     },
     textcategrory: {
         color: "gray",
         fontWeight: "500",
+        fontSize: 14
     },
 });

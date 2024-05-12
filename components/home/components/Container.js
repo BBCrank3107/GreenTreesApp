@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         flex: 1,
-        paddingBottom: 30,
+        paddingBottom: 100,
         backgroundColor: 'white',
         borderTopStartRadius: 25,
         borderTopEndRadius: 25,
