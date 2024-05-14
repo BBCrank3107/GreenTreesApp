@@ -6,15 +6,81 @@ import {
     TouchableOpacity,
     View,
     StatusBar,
-    Image
+    Image,
+    Alert
 } from "react-native";
 import { globalColors } from "../../styles/Colors";
+import { ipAddress } from "../../ip/ip";
 const LOGIN = "LOGIN";
 const SIGN_UP = "SIGN_UP";
 
 const Login = ({ navigation }) => {
     const [page, setPage] = useState(LOGIN);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [userEmail, setUserEmail] = useState('');
+    const [userID, setUserID] = useState('')
+    const [emailSU, setEmailSU] = useState('');
+    const [passwordSU, setPasswordSU] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [pwdHidden, setPwdHidden] = useState(true);
+
+    const handleLogin = () => {
+        if (!email || !password) {
+            Alert.alert('Vui lòng nhập đầy đủ email và mật khẩu để đăng nhập');
+            return;
+        }
+        fetch(`${ipAddress}/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                UserEmail: email,
+                UserPass: password,
+            }),
+        }).then(response => response.json())
+          .then(data => {
+              if (data.success) {
+                  setUserEmail(email); // Lưu trữ UserEmail
+                  setUserID(data.UserID); // Lưu trữ UserID
+                  navigation.navigate('HomeTabs', { userEmail: email, userID: data.UserID });
+              } else {
+                  throw new Error('Login failed');
+              }
+          }).catch(error => {
+              Alert.alert('Email hoặc mật khẩu không đúng');
+          });
+    };
+
+    const handleSignUp = () => {
+        if (!emailSU || !passwordSU || !confirmPassword) {
+            Alert.alert('Vui lòng nhập đầy đủ Email, mật khẩu và nhập lại mật khẩu');
+            return;
+        }
+        if (passwordSU !== confirmPassword) {
+            Alert.alert('Mật khẩu và nhập lại mật khẩu không khớp');
+            return;
+        }
+        fetch(`${ipAddress}/signup`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                UserEmail: emailSU,
+                UserPass: passwordSU,
+            }),
+        }).then(response => {
+            if (response.ok) {
+                Alert.alert('Đăng ký thành công');
+            } else {
+                throw new Error('Đăng ký thất bại');
+            }
+        }).catch(error => {
+            Alert.alert('Đăng ký thất bại');
+        });
+    };
 
     const renderForm = () => {
         if (page === LOGIN) {
@@ -23,12 +89,19 @@ const Login = ({ navigation }) => {
                     <View style={styles.atext}>
                         <Text style={styles.textIn}>Đăng nhập vào tài khoản</Text>
                     </View>
-                    <TextInput style={styles.input1} placeholder="E-mail"></TextInput>
+                    <TextInput
+                        style={styles.input1}
+                        placeholder="E-mail"
+                        onChangeText={(text) => setEmail(text)}
+                        value={email}
+                    ></TextInput>
                     <View style={styles.pass}>
                         <TextInput
                             style={styles.input2}
                             placeholder="Nhập mật khẩu"
                             secureTextEntry={pwdHidden ? true : false}
+                            onChangeText={(text) => setPassword(text)}
+                            value={password}
                         ></TextInput>
                         <TouchableOpacity
                             style={styles.iconContainer}
@@ -46,9 +119,7 @@ const Login = ({ navigation }) => {
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.btn}
-                        onPress={() => {
-                            navigation.navigate('HomeTabs')
-                        }}
+                        onPress={() => handleLogin()}
                     >
                         <Text style={styles.textBtn}>Đăng nhập</Text>
                     </TouchableOpacity>
@@ -78,13 +149,21 @@ const Login = ({ navigation }) => {
                     <View style={styles.atext}>
                         <Text style={styles.textIn}>Đăng ký tài khoản</Text>
                     </View>
-                    <TextInput style={styles.input1} placeholder="E-mail"></TextInput>
+                    <TextInput
+                        style={styles.input1}
+                        placeholder="E-mail"
+                        onChangeText={(text) => setEmailSU(text)}
+                        value={emailSU}
+                    />
+
                     <View style={styles.pass}>
                         <TextInput
                             style={styles.input2}
                             placeholder="Nhập mật khẩu"
                             secureTextEntry={pwdHidden ? true : false}
-                        ></TextInput>
+                            onChangeText={(text) => setPasswordSU(text)}
+                            value={passwordSU}
+                        />
                         <TouchableOpacity
                             style={styles.iconContainer}
                             onPress={() => setPwdHidden(!pwdHidden)}
@@ -101,7 +180,9 @@ const Login = ({ navigation }) => {
                             style={styles.input2}
                             placeholder="Nhập lại mật khẩu"
                             secureTextEntry={pwdHidden ? true : false}
-                        ></TextInput>
+                            onChangeText={(text) => setConfirmPassword(text)}
+                            value={confirmPassword}
+                        />
                         <TouchableOpacity
                             style={styles.iconContainer}
                             onPress={() => setPwdHidden(!pwdHidden)}
@@ -114,7 +195,7 @@ const Login = ({ navigation }) => {
                         </TouchableOpacity>
                     </View>
 
-                    <TouchableOpacity style={styles.btn}>
+                    <TouchableOpacity style={styles.btn} onPress={() => handleSignUp()}>
                         <Text style={styles.textBtn}>Đăng ký ngay</Text>
                     </TouchableOpacity>
 

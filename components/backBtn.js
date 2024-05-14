@@ -1,7 +1,18 @@
 import React from 'react';
 import { TouchableOpacity, Image } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
-const BackBtn = ({ onPress }: any) => {
+const BackBtn = ({ onPress, userID }) => {
+    const navigation = useNavigation();
+
+    const handlePress = () => {
+        if (onPress && typeof onPress === 'function') {
+            onPress(); // Gọi onPress nếu nó là một hàm
+        } else {
+            navigation.navigate('HomeTabs', { screen: 'Shop', params: { userID } });
+        }
+    };
+
     return (
         <TouchableOpacity
             style={{
@@ -14,7 +25,7 @@ const BackBtn = ({ onPress }: any) => {
                 margin: 10, 
                 elevation: 1
             }}
-            onPress={onPress}>
+            onPress={handlePress}>
             <Image style={{ height: 16, width: 16 }} source={require('../images/icons/back.png')} />
         </TouchableOpacity>
     );

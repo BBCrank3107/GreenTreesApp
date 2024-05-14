@@ -1,27 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
-import { globalColors } from '../../../styles/Colors';
-import { ipAddress } from '../../../ip/ip';
 import { useNavigation } from '@react-navigation/native';
 
+const Product = ({ selectedCategory, productData, userID }) => {
+    const [filteredProductData, setFilteredProductData] = useState([]);
+    const navigation = useNavigation();
 
-const Product = ({ navigation }) => {
-    const [productData, setProductData] = useState([]);
-    navigation = useNavigation();
     useEffect(() => {
-        fetchData();
-    }, []);
+        filterProductsByCategory(selectedCategory);
+    }, [selectedCategory, productData]);
 
-    const fetchData = async () => {
-        try {
-            const response = await fetch(`${ipAddress}/product`);
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            const data = await response.json();
-            setProductData(data);
-        } catch (error) {
-            console.error('Error fetching data:', error);
+    const filterProductsByCategory = (category) => {
+        if (category === "All") {
+            setFilteredProductData(productData);
+        } else {
+            const filteredProducts = productData.filter(product => product.CategoryName === category);
+            setFilteredProductData(filteredProducts);
         }
     };
 
@@ -29,7 +23,7 @@ const Product = ({ navigation }) => {
         <View style={styles.areaProduct}>
             <View style={styles.container}>
                 <View style={styles.productLeft}>
-                    {productData.map((product, index) => {
+                    {filteredProductData.map((product, index) => {
                         if (product.ProductID % 2 !== 0) {
                             return (
                                 <TouchableOpacity
@@ -41,7 +35,8 @@ const Product = ({ navigation }) => {
                                         productImage: product.Image,
                                         productPrice: product.Price,
                                         productPlantID: product.PlantID,
-                                        productData: productData.filter(item => item.ProductID !== product.ProductID)
+                                        productData: filteredProductData.filter(item => item.ProductID !== product.ProductID),
+                                        userID: userID
                                     })}
                                 >
                                     <View style={styles.areaImg}>
@@ -67,7 +62,7 @@ const Product = ({ navigation }) => {
                     })}
                 </View>
                 <View style={styles.productRight}>
-                    {productData.map((product, index) => {
+                    {filteredProductData.map((product, index) => {
                         if (product.ProductID % 2 === 0) {
                             return (
                                 <TouchableOpacity
@@ -79,7 +74,8 @@ const Product = ({ navigation }) => {
                                         productImage: product.Image,
                                         productPrice: product.Price,
                                         productPlantID: product.PlantID,
-                                        productData: productData.filter(item => item.ProductID !== product.ProductID)
+                                        productData: filteredProductData.filter(item => item.ProductID !== product.ProductID),
+                                        userID: userID
                                     })}
                                 >
                                     <View style={styles.areaImg}>

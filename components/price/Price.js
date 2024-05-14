@@ -79,7 +79,6 @@ const Price = ({ navigation }) => {
 
     return (
         <View style={{flex: 1, backgroundColor: '#fffff3',}}>
-            <BackBtn onPress={() => { navigation.navigate('Account') }}></BackBtn>
             <View style={styles.container}>
                 <View style={styles.containerTop}>
                     <Text style={styles.title}>
@@ -110,7 +109,7 @@ const styles = StyleSheet.create({
     containerTop: {
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 10
+        marginTop: 20
     },
     title: {
         fontWeight: 'bold',

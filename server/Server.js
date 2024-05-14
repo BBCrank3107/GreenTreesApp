@@ -15,6 +15,7 @@ const db = mysql.createConnection({
 // Connect to MySQL
 db.connect(err => {
     if (err) {
+        console.error('MySQL Connection Error:', err);
         throw err;
     }
     console.log('MySQL Connected');
@@ -22,6 +23,41 @@ db.connect(err => {
 
 // Middleware
 app.use(express.json());
+
+//Login
+app.post('/login', (req, res) => {
+    const { UserEmail, UserPass } = req.body;
+    const sql = `SELECT * FROM user WHERE UserEmail = ? AND UserPass = ?`;
+    db.query(sql, [UserEmail, UserPass], (err, result) => {
+        if (err) {
+            res.status(500).send({ message: 'Error retrieving data' });
+            throw err;
+        }
+        if (result.length > 0) {
+            const user = result[0];
+            res.status(200).send({
+                success: true,
+                message: 'Login successful',
+                UserID: user.UserID // Trả về UserID
+            });
+        } else {
+            res.status(401).send({ success: false, message: 'Email hoặc Mật khẩu không đúng' });
+        }
+    });
+});
+
+//signup
+app.post('/signup', (req, res) => {
+    const { UserEmail, UserPass } = req.body;
+    const sql = `INSERT INTO user (UserEmail, UserPass) VALUES (?, ?)`;
+    db.query(sql, [UserEmail, UserPass], (err, result) => {
+        if (err) {
+            res.status(500).send({ success: false, message: 'Đăng ký thất bại' });
+            throw err;
+        }
+        res.status(200).send({ success: true, message: 'Đăng ký thành công' });
+    });
+});
 
 // Insert data category
 app.post('/category', (req, res) => {
@@ -76,9 +112,27 @@ app.get('/category/plants', (req, res) => {
     });
 });
 
-// Select data product
-app.get('/product', (req, res) => {
-    const sql = `SELECT * FROM product`;
+// Select full data product
+app.get('/category/plant/product', (req, res) => {
+    let sql = `
+                SELECT 
+                c.CategoryID,
+                c.CategoryName,
+                p.PlantID,
+                p.PlantName,
+                p.AVGPriceYesterday,
+                p.AVGPriceNow,
+                pr.ProductID,
+                pr.ProductName,
+                pr.Price,
+                pr.ProductInfo,
+                pr.Image
+                FROM 
+                    category c
+                JOIN 
+                    plant p ON c.CategoryID = p.CategoryID
+                JOIN 
+                    product pr ON p.PlantID = pr.PlantID`;
     db.query(sql, (err, result) => {
         if (err) {
             res.status(500).send({ message: 'Error retrieving data' });

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, ScrollView, Image, TouchableOpacity, StyleSheet } from 'react-native';
 
-const ProductSimilar = ({ plantID, productData, navigation }) => {
+const ProductSimilar = ({ plantID, productData, userID, navigation }) => {
     const similarProducts = productData.filter(product => product.PlantID === plantID);
 
     const restartInfoProduct = (product) => {
@@ -14,7 +14,8 @@ const ProductSimilar = ({ plantID, productData, navigation }) => {
                     productImage: product.Image,
                     productPrice: product.Price,
                     productPlantID: product.PlantID,
-                    productData: productData.filter(item => item.ProductID !== product.ProductID)
+                    productData: productData.filter(item => item.ProductID !== product.ProductID),
+                    userID: userID
                 }
             }],
         });

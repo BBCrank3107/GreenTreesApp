@@ -1,6 +1,4 @@
-import BackBtn from "../backBtn";
-import HeartBtn from "../heartBtn";
-import React from "react";
+import React, {useState} from "react";
 import {
     StyleSheet,
     Text,
@@ -8,22 +6,38 @@ import {
     Image,
     TouchableOpacity,
     ScrollView,
+    TextInput,
 } from "react-native";
+import BackBtn from "../backBtn";
+import HeartBtn from "../heartBtn";
 import ProductSimilar from "./ProductSimilar";
 import { globalColors } from "../../styles/Colors";
 
 export default function InfoProduct({ route, navigation }) {
-    const { productInfo, productName, productImage, productPrice, productPlantID, productData } = route.params;
+    const { productInfo, productName, productImage, productPrice, productPlantID, productData, userID } = route.params;
+
+    const [quantity, setQuantity] = useState(1);
+
+    // Hàm xử lý tăng số lượng
+    const increaseQuantity = () => {
+        setQuantity(prevQuantity => prevQuantity + 1);
+    };
+
+    // Hàm xử lý giảm số lượng
+    const decreaseQuantity = () => {
+        if (quantity > 1) {
+            setQuantity(prevQuantity => prevQuantity - 1);
+        }
+    };
 
     return (
         <View style={styles.container}>
             <ScrollView showsVerticalScrollIndicator={false}>
-                {/* topHeader */}
                 <View style={styles.topHeader}>
-                    <BackBtn onPress={() => navigation.navigate('HomeTabs', { screen: 'Shop' })} />
+                    <BackBtn onPress={() => navigation.navigate('HomeTabs', { screen: 'Shop', params: { userID } })} userID={userID} />
+                    <Text>UserID: {userID}</Text>
                     <HeartBtn />
                 </View>
-                {/* endtophead */}
                 <View style={{ flex: 1, paddingHorizontal: 20, paddingBottom: 20 }}>
                     <ScrollView
                         horizontal
@@ -56,14 +70,25 @@ export default function InfoProduct({ route, navigation }) {
                     </View>
                 </View>
 
-                {/* sp tương tự */}
-                <ProductSimilar productData={route.params.productData} plantID={productPlantID} navigation={navigation} />
+                <ProductSimilar productData={route.params.productData} plantID={productPlantID} navigation={navigation} userID={userID}/>
             </ScrollView>
-            {/* Add to cart area */}
             <View style={styles.bottom}>
                 <View style={styles.areaPricePlant}>
-                    <Text style={styles.text}>Giá:</Text>
                     <Text style={styles.pricePlant}>{productPrice} VNĐ</Text>
+                    <View style={styles.areaQuantity}>
+                        {/* Button giảm số lượng */}
+                        <TouchableOpacity style={styles.btnUpAnDown} onPress={decreaseQuantity}>
+                            <Text style={styles.textBtnUpAnDown}>-</Text>
+                        </TouchableOpacity>
+                        <View style={styles.areaTextQuantity}>
+                            {/* Hiển thị số lượng */}
+                            <TextInput style={styles.textQuantity}>{quantity}</TextInput>
+                        </View>
+                        {/* Button tăng số lượng */}
+                        <TouchableOpacity style={styles.btnUpAnDown} onPress={increaseQuantity}>
+                            <Text style={styles.textBtnUpAnDown}>+</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
                 <View style={styles.areaAddtocard}>
                     <TouchableOpacity style={styles.btnContainer}>
@@ -133,6 +158,8 @@ const styles = StyleSheet.create({
         zIndex: 1,
         elevation: 10,
         alignItems: 'center',
+        borderTopStartRadius: 30,
+        borderTopEndRadius: 30,
     },
     areaPricePlant: {
         width: "40%",
@@ -140,14 +167,40 @@ const styles = StyleSheet.create({
     areaAddtocard: {
         width: "60%",
     },
-    text: {
-        fontSize: 24,
-        fontWeight: '500'
-    },
     pricePlant: {
-        fontSize: 24,
+        fontSize: 22,
         color: "red",
-        fontWeight: "700",
+        fontWeight: "500",
+    },
+    areaQuantity: {
+        width: '100%',
+        overflow: 'hidden',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    btnUpAnDown: {
+        width: 24,
+        height: 24,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: globalColors.mainGreen,
+        borderRadius: 12
+    },
+    textBtnUpAnDown: {
+        fontSize: 24,
+        paddingBottom: 3,
+        color: 'white',
+        position: 'absolute'
+    },
+    areaTextQuantity: {
+        width: 60,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    textQuantity: {
+        fontSize: 20,
+        height: 50,
     },
     textName: {
         fontSize: 30,

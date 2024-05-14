@@ -1,8 +1,10 @@
 import React from 'react';
-import { View, Image, TextInput, StatusBar, Text, StyleSheet } from 'react-native';
+import { View, Image, TextInput, StatusBar, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { globalColors } from '../../../styles/Colors';
+import { useNavigation } from '@react-navigation/native';
 
-const Header = () => {
+const Header = ({userID}) => {
+    const navigation = useNavigation();
     return (
         <View>
             <View style={styles.areaLogo}>
@@ -12,11 +14,18 @@ const Header = () => {
                         style={styles.imgLogo}
                     />
                 </View>
-                <View style={styles.user}>
-                    <Image
-                        source={require("../images/user.png")}
-                        style={styles.imgUser}
-                    />
+                <View style={styles.cart}>
+                    <TouchableOpacity
+                        style={styles.btnCart}
+                        onPress={() => {
+                            navigation.navigate('ShopCart', { userID })
+                        }}
+                    >
+                        <Image
+                            source={require("../images/cart.png")}
+                            style={styles.imgCart}
+                        />
+                    </TouchableOpacity>
                 </View>
             </View>
             <StatusBar style="auto" />
@@ -24,10 +33,12 @@ const Header = () => {
                 <Text style={styles.titleH1}>CÂY GIỐNG XANH</Text>
             </View>
             <View style={styles.areaInput}>
-                <Image
-                    style={styles.searchIcon}
-                    source={require("../images/search.png")}
-                />
+                <TouchableOpacity>
+                    <Image
+                        style={styles.searchIcon}
+                        source={require("../images/search.png")}
+                    />
+                </TouchableOpacity>
                 <TextInput
                     style={styles.inputSearch}
                     placeholder="Tìm kiếm"
@@ -38,6 +49,8 @@ const Header = () => {
         </View>
     );
 };
+
+export default Header;
 
 const styles = StyleSheet.create({
     areaLogo: {
@@ -53,7 +66,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "flex-end",
     },
-    user: {
+    cart: {
         width: "42%",
         height: "100%",
         justifyContent: "center",
@@ -64,9 +77,18 @@ const styles = StyleSheet.create({
         width: 70,
         height: 70,
     },
-    imgUser: {
+    btnCart: {
+        alignItems: 'center',
+        justifyContent: 'center',
         width: 40,
         height: 40,
+        borderRadius: 20,
+        overflow: 'hidden',
+        backgroundColor: '#d9d9d9'
+    },
+    imgCart: {
+        width: 24,
+        height: 24,
     },
     title: {
         width: "100%",
@@ -111,4 +133,3 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Header;

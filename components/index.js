@@ -29,7 +29,7 @@ import InfoProduct from './shop/InfoProduct';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-function MyTabs() {
+function MyTabs({ route }) {
     const tabBarIconStyle = (focused) => ({
         backgroundColor: focused ? 'white' : globalColors.mainGreen,
         elevation: focused ? 5 : 0
@@ -38,6 +38,9 @@ function MyTabs() {
     const tabBarIconTintColor = (focused) => ({
         tintColor: focused ? 'gray' : 'white'
     });
+
+    const userEmail = route.params?.userEmail || '';
+    const userID = route.params?.userID || '';
 
     return (
         <Tab.Navigator
@@ -79,7 +82,7 @@ function MyTabs() {
                     </View>
                 ),
             }} />
-            <Tab.Screen name="Shop" component={Shop} options={{
+            <Tab.Screen name="Shop" component={Shop} initialParams={{ userEmail, userID }} options={{
                 tabBarIcon: ({ focused }) => (
                     <View style={[styles.main, { backgroundColor: focused ? globalColors.mainGreen : 'white' }]}>
                         <View style={[{ width: 54, height: 54, borderRadius: 27, justifyContent: 'center', alignItems: 'center' }, tabBarIconStyle(focused)]}>
@@ -92,18 +95,18 @@ function MyTabs() {
                     </View>
                 ),
             }} />
-            <Tab.Screen name="ShopCart" component={ShopCart} options={{
+            <Tab.Screen name="Price" component={Price} options={{
                 tabBarIcon: ({ focused }) => (
                     <View style={[styles.backgroundIcon, tabBarIconStyle(focused)]}>
                         <Image
-                            source={require('../images/icons/cart.png')}
+                            source={require('../images/icons/price.png')}
                             style={[styles.tabBarIcon, tabBarIconTintColor(focused)]}
                             resizeMode='stretch'
                         />
                     </View>
                 ),
             }} />
-            <Tab.Screen name="Account" component={Account} options={{
+            <Tab.Screen name="Account" component={Account} initialParams={{ userEmail, userID }} options={{
                 tabBarIcon: ({ focused }) => (
                     <View style={[styles.backgroundIcon, tabBarIconStyle(focused)]}>
                         <Image
@@ -133,7 +136,6 @@ export default RootComponent = function () {
                 <Stack.Screen name="InfoAccount" component={InfoAccount} />
                 <Stack.Screen name="Calculator" component={Calculator} />
                 <Stack.Screen name="ShopCart" component={ShopCart} />
-                <Stack.Screen name="Price" component={Price} />
                 <Stack.Screen name="InfoProduct" component={InfoProduct} />
             </Stack.Navigator>
         </NavigationContainer>

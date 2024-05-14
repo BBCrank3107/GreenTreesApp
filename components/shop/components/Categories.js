@@ -3,12 +3,13 @@ import { Text, ScrollView, TouchableOpacity, StyleSheet, View } from 'react-nati
 import { globalColors } from '../../../styles/Colors';
 import { ipAddress } from '../../../ip/ip';
 
-const Categories = () => {
+const Categories = ({ onCategoryChange }) => { // Thêm props onCategoryChange để thông báo khi danh mục thay đổi
     const [selectedCategory, setSelectedCategory] = useState("All");
     const [categoriesData, setCategoriesData] = useState([]);
 
     const handleCategoryPress = (category) => {
         setSelectedCategory(category);
+        onCategoryChange(category); // Gửi thông báo về việc thay đổi danh mục
     };
 
     useEffect(() => {

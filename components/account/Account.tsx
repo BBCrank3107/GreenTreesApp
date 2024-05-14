@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     View,
     Text,
@@ -8,11 +8,13 @@ import {
 } from 'react-native';
 import { globalColors } from '../../styles/Colors';
 
-const Account = ({ navigation }: any) => {
+const Account = ({ navigation, route }: any) => {
+    const userEmail = route.params?.userEmail || '';
+
     const menuItems = [
         {
             title: "Tính năng",
-            subItems: ["Máy tính", "Giá cả thị trường"],
+            subItems: ["Máy tính"],
         },
         {
             title: "Tài khoản và bảo mật",
@@ -46,8 +48,6 @@ const Account = ({ navigation }: any) => {
             navigation.navigate('InfoAccount');
         } else if (subItem === 'Máy tính') {
             navigation.navigate('Calculator');
-        } else if (subItem === 'Giá cả thị trường') {
-            navigation.navigate('Price');
         }
     };
 
@@ -59,7 +59,7 @@ const Account = ({ navigation }: any) => {
                     {/* Avatar Icon */}
                     <View style={styles.avatar}></View>
                     {/* User Name */}
-                    <Text style={styles.userName}>Văn Bình Nguyễn</Text>
+                    <Text style={styles.userEmail}>{userEmail}</Text>
                 </View>
             </View>
 
@@ -106,6 +106,8 @@ const Account = ({ navigation }: any) => {
     );
 };
 
+export default Account;
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -130,9 +132,9 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         marginRight: 10,
     },
-    userName: {
+    userEmail: {
         // marginTop: 20,
-        fontSize: 25,
+        fontSize: 20,
         fontWeight: "bold",
         color: 'white'
     },
@@ -179,4 +181,3 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Account;
