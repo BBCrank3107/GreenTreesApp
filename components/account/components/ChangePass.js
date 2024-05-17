@@ -6,14 +6,16 @@ import {
   ScrollView,
   TextInput,
   TouchableOpacity,
-  StatusBar,
   Text,
-  Image
+  Alert,
 } from "react-native";
 import BackBtn from "../../backBtn";
 import { globalColors } from "../../../styles/Colors";
+import { ipAddress } from "../../../ip/ip";
 
-const ChangePass = ({ navigation }: any) => {
+const ChangePass = ({ navigation, route }) => {
+  const userID = route.params?.userID || '';
+
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -24,9 +26,45 @@ const ChangePass = ({ navigation }: any) => {
     setPwdHidden(!pwdHidden);
   };
 
+  const handleBackPress = () => {
+    navigation.navigate('Account', { userID });
+  };
+
+  const handleUpdatePassword = async () => {
+    if (newPassword !== confirmPassword) {
+      Alert.alert("Lỗi", "Mật khẩu mới và nhập lại mật khẩu mới không khớp.");
+      return;
+    }
+
+    try {
+      const response = await fetch(`${ipAddress}/update-password`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userID,
+          currentPassword,
+          newPassword,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        Alert.alert("Thành công", "Cập nhật mật khẩu thành công.");
+        navigation.navigate('Account', { userID });
+      } else {
+        Alert.alert("Lỗi", result.message);
+      }
+    } catch (error) {
+      Alert.alert("Lỗi", "Đã xảy ra lỗi khi cập nhật mật khẩu.");
+    }
+  };
+
   return (
     <KeyboardAvoidingView style={styles.container}>
-      <BackBtn onPress={() => {navigation.navigate('Account')}}></BackBtn>
+      <BackBtn onPress={handleBackPress}></BackBtn>
       <ScrollView contentContainerStyle={styles.scrollView}>
         <Text style={styles.title}>
           Cập nhật mật khẩu
@@ -66,7 +104,7 @@ const ChangePass = ({ navigation }: any) => {
             onChangeText={setConfirmPassword}
           />
         </View>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={handleUpdatePassword}>
           <Text style={styles.buttonText}>Cập nhật</Text>
         </TouchableOpacity>
       </ScrollView>

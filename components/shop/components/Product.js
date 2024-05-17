@@ -35,6 +35,7 @@ const Product = ({ selectedCategory, productData, userID }) => {
                                         productImage: product.Image,
                                         productPrice: product.Price,
                                         productPlantID: product.PlantID,
+                                        productStatus: product.Status,
                                         productData: filteredProductData.filter(item => item.ProductID !== product.ProductID),
                                         userID: userID
                                     })}
@@ -47,7 +48,19 @@ const Product = ({ selectedCategory, productData, userID }) => {
                                             <Text style={styles.namePlant}>{product.ProductName}</Text>
                                             <Text style={styles.pricePlant}>{product.Price} VNĐ</Text>
                                         </View>
-                                        <TouchableOpacity style={styles.underRightImg}>
+                                        <TouchableOpacity
+                                            style={styles.underRightImg}
+                                            onPress={() => navigation.navigate('InfoProduct', {
+                                                productInfo: product.ProductInfo,
+                                                productName: product.ProductName,
+                                                productImage: product.Image,
+                                                productPrice: product.Price,
+                                                productPlantID: product.PlantID,
+                                                productStatus: product.Status,
+                                                productData: filteredProductData.filter(item => item.ProductID !== product.ProductID),
+                                                userID: userID
+                                            })}
+                                        >
                                             <Image
                                                 style={styles.addProduct}
                                                 source={require('../images/add.png')}
@@ -74,6 +87,7 @@ const Product = ({ selectedCategory, productData, userID }) => {
                                         productImage: product.Image,
                                         productPrice: product.Price,
                                         productPlantID: product.PlantID,
+                                        productStatus: product.Status,
                                         productData: filteredProductData.filter(item => item.ProductID !== product.ProductID),
                                         userID: userID
                                     })}
@@ -86,7 +100,19 @@ const Product = ({ selectedCategory, productData, userID }) => {
                                             <Text style={styles.namePlant}>{product.ProductName}</Text>
                                             <Text style={styles.pricePlant}>{product.Price} VNĐ</Text>
                                         </View>
-                                        <TouchableOpacity style={styles.underRightImg}>
+                                        <TouchableOpacity
+                                            style={styles.underRightImg}
+                                            onPress={() => navigation.navigate('InfoProduct', {
+                                                productInfo: product.ProductInfo,
+                                                productName: product.ProductName,
+                                                productImage: product.Image,
+                                                productPrice: product.Price,
+                                                productPlantID: product.PlantID,
+                                                productStatus: product.Status,
+                                                productData: filteredProductData.filter(item => item.ProductID !== product.ProductID),
+                                                userID: userID
+                                            })}
+                                        >
                                             <Image
                                                 style={styles.addProduct}
                                                 source={require('../images/add.png')}

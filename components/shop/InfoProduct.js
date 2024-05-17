@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import {
     StyleSheet,
     Text,
@@ -7,20 +7,26 @@ import {
     TouchableOpacity,
     ScrollView,
     TextInput,
+    Alert
 } from "react-native";
 import BackBtn from "../backBtn";
 import HeartBtn from "../heartBtn";
 import ProductSimilar from "./ProductSimilar";
 import { globalColors } from "../../styles/Colors";
+import { ipAddress } from "../../ip/ip";
 
 export default function InfoProduct({ route, navigation }) {
-    const { productInfo, productName, productImage, productPrice, productPlantID, productData, userID } = route.params;
+    const { productInfo, productName, productImage, productPrice, productPlantID, productData, productStatus,userID } = route.params;
 
-    const [quantity, setQuantity] = useState(1);
+    const [quantity, setQuantity] = useState(0);
 
     // Hàm xử lý tăng số lượng
     const increaseQuantity = () => {
-        setQuantity(prevQuantity => prevQuantity + 1);
+        if (quantity < 1000) {
+            setQuantity(prevQuantity => prevQuantity + 1);
+        } else {
+            Alert.alert('Số lượng đã đạt giới hạn');
+        }
     };
 
     // Hàm xử lý giảm số lượng
@@ -30,12 +36,66 @@ export default function InfoProduct({ route, navigation }) {
         }
     };
 
+    // Hàm xử lý thay đổi số lượng
+    const handleQuantityChange = (text) => {
+        const parsedQuantity = parseInt(text, 10);
+        if (!isNaN(parsedQuantity) && parsedQuantity > 0) {
+            if (parsedQuantity > 1000) {
+                Alert.alert('Số lượng đã đạt giới hạn');
+                setQuantity(1000);
+            } else {
+                setQuantity(parsedQuantity);
+            }
+        } else {
+            setQuantity(1);
+        }
+    };
+
+    // Hàm tính tổng giá
+    const calculateTotalPrice = () => {
+        return productPrice * quantity;
+    };
+
+    // Hàm thêm vào giỏ hàng
+    const addToCart = async () => {
+        if (quantity <= 0) {
+            Alert.alert('Lỗi!', 'Số lượng phải lớn hơn 0');
+            return;
+        }
+
+        const totalPrice = calculateTotalPrice();
+        try {
+            const response = await fetch(`${ipAddress}/add-to-cart`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    ProductName: productName,
+                    Image: productImage,
+                    Price: productPrice,
+                    Quantity: quantity,
+                    TotalPrice: totalPrice,
+                    UserID: userID
+                }),
+            });
+            const data = await response.json();
+            if (data.success) {
+                Alert.alert('Thành công!', 'Thêm vào giỏ hàng thành công');
+            } else {
+                Alert.alert('Lỗi!', `Thêm vào giỏ hàng thất bại: ${data.message}`);
+            }
+        } catch (error) {
+            console.error(error);
+            Alert.alert('Lỗi!', 'Có lỗi xảy ra. Vui lòng thử lại');
+        }
+    };
+
     return (
         <View style={styles.container}>
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.topHeader}>
                     <BackBtn onPress={() => navigation.navigate('HomeTabs', { screen: 'Shop', params: { userID } })} userID={userID} />
-                    <Text>UserID: {userID}</Text>
                     <HeartBtn />
                 </View>
                 <View style={{ flex: 1, paddingHorizontal: 20, paddingBottom: 20 }}>
@@ -55,9 +115,14 @@ export default function InfoProduct({ route, navigation }) {
                         <Text style={styles.textName}>{productName}</Text>
                     </View>
                     <View style={styles.state}>
-                        <Text style={{ fontSize: 20 }}>Tình trạng: </Text>
-                        <View style={styles.boxState}>
-                            <Text style={styles.textState}>Còn hàng</Text>
+                        <View>
+                            <Text style={{ fontSize: 20, color: 'red' }}>{productPrice} VNĐ</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                            <Text style={{ fontSize: 20 }}>Tình trạng: </Text>
+                            <View style={styles.boxState}>
+                                <Text style={styles.textState}>{productStatus}</Text>
+                            </View>
                         </View>
                     </View>
 
@@ -70,11 +135,11 @@ export default function InfoProduct({ route, navigation }) {
                     </View>
                 </View>
 
-                <ProductSimilar productData={route.params.productData} plantID={productPlantID} navigation={navigation} userID={userID}/>
+                <ProductSimilar productData={route.params.productData} plantID={productPlantID} navigation={navigation} userID={userID} />
             </ScrollView>
             <View style={styles.bottom}>
                 <View style={styles.areaPricePlant}>
-                    <Text style={styles.pricePlant}>{productPrice} VNĐ</Text>
+                    <Text style={styles.pricePlant}>{calculateTotalPrice()} VNĐ</Text>
                     <View style={styles.areaQuantity}>
                         {/* Button giảm số lượng */}
                         <TouchableOpacity style={styles.btnUpAnDown} onPress={decreaseQuantity}>
@@ -82,7 +147,13 @@ export default function InfoProduct({ route, navigation }) {
                         </TouchableOpacity>
                         <View style={styles.areaTextQuantity}>
                             {/* Hiển thị số lượng */}
-                            <TextInput style={styles.textQuantity}>{quantity}</TextInput>
+                            <TextInput
+                                style={styles.textQuantity}
+                                value={String(quantity)}
+                                editable={true}
+                                keyboardType="numeric"
+                                onChangeText={(text) => handleQuantityChange(text)}
+                            />
                         </View>
                         {/* Button tăng số lượng */}
                         <TouchableOpacity style={styles.btnUpAnDown} onPress={increaseQuantity}>
@@ -91,7 +162,7 @@ export default function InfoProduct({ route, navigation }) {
                     </View>
                 </View>
                 <View style={styles.areaAddtocard}>
-                    <TouchableOpacity style={styles.btnContainer}>
+                    <TouchableOpacity style={styles.btnContainer} onPress={addToCart}>
                         <Text style={styles.btnText}>Thêm vào giỏ hàng</Text>
                     </TouchableOpacity>
                 </View>
@@ -134,12 +205,11 @@ const styles = StyleSheet.create({
         height: 40,
         flexDirection: 'row',
         alignItems: 'center',
-        paddingHorizontal: 10
+        paddingHorizontal: 10,
+        justifyContent: 'space-between'
     },
     boxState: {
         height: '100%',
-        justifyContent: "center",
-        alignItems: "center",
     },
     areaDetail: {
         width: "100%",
@@ -168,9 +238,8 @@ const styles = StyleSheet.create({
         width: "60%",
     },
     pricePlant: {
-        fontSize: 22,
+        fontSize: 20,
         color: "red",
-        fontWeight: "500",
     },
     areaQuantity: {
         width: '100%',
@@ -201,6 +270,7 @@ const styles = StyleSheet.create({
     textQuantity: {
         fontSize: 20,
         height: 50,
+        textAlign: 'center',
     },
     textName: {
         fontSize: 30,
@@ -210,7 +280,7 @@ const styles = StyleSheet.create({
         width: "100%",
     },
     textState: {
-        fontSize: 24,
+        fontSize: 20,
         fontWeight: "500",
         color: globalColors.mainGreen
     },
@@ -226,6 +296,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         borderRadius: 50,
+        elevation: 5
     },
     btnText: {
         color: "white",

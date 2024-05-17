@@ -25,6 +25,11 @@ const Login = ({ navigation }) => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [pwdHidden, setPwdHidden] = useState(true);
 
+    const isValidEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+
     const handleLogin = () => {
         if (!email || !password) {
             Alert.alert('Vui lòng nhập đầy đủ email và mật khẩu để đăng nhập');
@@ -42,9 +47,10 @@ const Login = ({ navigation }) => {
         }).then(response => response.json())
           .then(data => {
               if (data.success) {
-                  setUserEmail(email); // Lưu trữ UserEmail
-                  setUserID(data.UserID); // Lưu trữ UserID
-                  navigation.navigate('HomeTabs', { userEmail: email, userID: data.UserID });
+                  setUserEmail(email);
+                  setUserID(data.UserID);
+                  setPassword('')
+                  navigation.navigate('HomeTabs', { screen: 'Shop', userEmail: email, userID: data.UserID });
               } else {
                   throw new Error('Login failed');
               }
@@ -56,6 +62,10 @@ const Login = ({ navigation }) => {
     const handleSignUp = () => {
         if (!emailSU || !passwordSU || !confirmPassword) {
             Alert.alert('Vui lòng nhập đầy đủ Email, mật khẩu và nhập lại mật khẩu');
+            return;
+        }
+        if (!isValidEmail(emailSU)) {
+            Alert.alert('Email không đúng định dạng');
             return;
         }
         if (passwordSU !== confirmPassword) {
@@ -71,15 +81,19 @@ const Login = ({ navigation }) => {
                 UserEmail: emailSU,
                 UserPass: passwordSU,
             }),
-        }).then(response => {
-            if (response.ok) {
-                Alert.alert('Đăng ký thành công');
-            } else {
-                throw new Error('Đăng ký thất bại');
-            }
-        }).catch(error => {
-            Alert.alert('Đăng ký thất bại');
-        });
+        }).then(response => response.json())
+          .then(data => {
+              if (data.success) {
+                  Alert.alert('Đăng ký thành công');
+                  setEmailSU('');
+                  setPasswordSU('');
+                  setConfirmPassword('');
+              } else {
+                  throw new Error(data.message || 'Đăng ký thất bại');
+              }
+          }).catch(error => {
+              Alert.alert(error.message || 'Đăng ký thất bại');
+          });
     };
 
     const renderForm = () => {
@@ -211,7 +225,7 @@ const Login = ({ navigation }) => {
     return (
         <View style={styles.content}>
             <StatusBar barStyle="light-content" />
-            {/* // loginheader */}
+            {/* Header */}
             <View style={styles.header}>
                 <View style={styles.under}>
                     <Text style={styles.headText}>GreenTrees</Text>
@@ -236,11 +250,9 @@ const Login = ({ navigation }) => {
                     </TouchableOpacity>
                 </View>
             </View>
-            {/* end loginheader */}
 
             {/* Body */}
             <View style={styles.body}>{renderForm()}</View>
-            {/* End Body */}
 
         </View>
     );
@@ -371,7 +383,6 @@ const styles = StyleSheet.create({
         textAlign: "right",
         marginRight: 30,
         fontSize: 14,
-        // color: "rgba(107, 106, 106, 0.362)",
         fontWeight: "500",
     },
     areabtnlogin: {

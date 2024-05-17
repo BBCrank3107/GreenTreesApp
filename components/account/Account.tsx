@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
     View,
     Text,
     ScrollView,
     TouchableOpacity,
     StyleSheet,
+    Image,
 } from 'react-native';
 import { globalColors } from '../../styles/Colors';
 
 const Account = ({ navigation, route }: any) => {
     const userEmail = route.params?.userEmail || '';
+    const userID = route.params?.userID || '';  // Get the userID from route params
 
     const menuItems = [
         {
@@ -17,8 +19,8 @@ const Account = ({ navigation, route }: any) => {
             subItems: ["Máy tính"],
         },
         {
-            title: "Tài khoản và bảo mật",
-            subItems: ["Thông tin tài khoản", "Đổi mật khẩu"],
+            title: "Bảo mật",
+            subItems: ["Đổi mật khẩu"],
         },
         {
             title: "Khác",
@@ -37,15 +39,9 @@ const Account = ({ navigation, route }: any) => {
         }
     };
 
-    const handleCloseSubItems = () => {
-        setExpandedItems([]);
-    };
-
     const handleSubItemPress = (subItem: string) => {
         if (subItem === 'Đổi mật khẩu') {
-            navigation.navigate('ChangePass');
-        } else if (subItem === 'Thông tin tài khoản') {
-            navigation.navigate('InfoAccount');
+            navigation.navigate('ChangePass', { userID });  // Pass userID when navigating
         } else if (subItem === 'Máy tính') {
             navigation.navigate('Calculator');
         }
@@ -57,7 +53,12 @@ const Account = ({ navigation, route }: any) => {
             <View style={styles.header}>
                 <View style={styles.avatarContainer}>
                     {/* Avatar Icon */}
-                    <View style={styles.avatar}></View>
+                    <View style={styles.avatar}>
+                        <Image
+                            source={{ uri: 'https://cdn4.iconfinder.com/data/icons/social-messaging-ui-color-and-shapes-3/177800/129-512.png' }}
+                            style={{ width: 60, height: 60 }}
+                        ></Image>
+                    </View>
                     {/* User Name */}
                     <Text style={styles.userEmail}>{userEmail}</Text>
                 </View>
@@ -131,9 +132,12 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         backgroundColor: 'white',
         marginRight: 10,
+        justifyContent: 'center', 
+        alignItems: 'center',
+        overflow: 'hidden',
+        elevation: 10
     },
     userEmail: {
-        // marginTop: 20,
         fontSize: 20,
         fontWeight: "bold",
         color: 'white'
@@ -149,7 +153,6 @@ const styles = StyleSheet.create({
     menuItemText: {
         fontSize: 18,
         color: "#333",
-        // fontWeight: 'bold'
     },
     activeItem: {
         backgroundColor: "#e0f2e0",
@@ -172,6 +175,7 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         backgroundColor: globalColors.mainGreen,
         marginBottom: 30,
+        elevation: 5
     },
     logoutButtonText: {
         color: "white",
@@ -180,4 +184,3 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
     },
 });
-

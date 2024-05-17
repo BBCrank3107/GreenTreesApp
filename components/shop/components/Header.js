@@ -3,16 +3,18 @@ import { View, Image, TextInput, StatusBar, Text, StyleSheet, TouchableOpacity }
 import { globalColors } from '../../../styles/Colors';
 import { useNavigation } from '@react-navigation/native';
 
-const Header = ({userID}) => {
+const Header = ({ userID }) => {
     const navigation = useNavigation();
     return (
         <View>
             <View style={styles.areaLogo}>
                 <View style={styles.logo}>
-                    <Image
-                        source={require("../images/logo.jpg")}
-                        style={styles.imgLogo}
-                    />
+                    <View style={{width: 70, height: 70, justifyContent: 'center', alignItems: 'center', borderRadius: 35, overflow: 'hidden'}}>
+                        <Image
+                            source={require("../images/logo.jpg")}
+                            style={styles.imgLogo}
+                        />
+                    </View>
                 </View>
                 <View style={styles.cart}>
                     <TouchableOpacity
@@ -58,7 +60,7 @@ const styles = StyleSheet.create({
         height: 100,
         display: "flex",
         flexDirection: "row",
-        marginTop: 20,
+        backgroundColor: globalColors.mainGreen
     },
     logo: {
         width: "58%",
@@ -76,6 +78,7 @@ const styles = StyleSheet.create({
     imgLogo: {
         width: 70,
         height: 70,
+        elevation: 10
     },
     btnCart: {
         alignItems: 'center',
@@ -84,21 +87,24 @@ const styles = StyleSheet.create({
         height: 40,
         borderRadius: 20,
         overflow: 'hidden',
-        backgroundColor: '#d9d9d9'
+        backgroundColor: globalColors.mainGreen,
     },
     imgCart: {
         width: 24,
         height: 24,
+        tintColor: 'white'
     },
     title: {
         width: "100%",
         height: 40,
         alignItems: "center",
+        backgroundColor: globalColors.mainGreen,
+        marginBottom: 20
     },
     titleH1: {
         fontSize: 22,
         fontWeight: "600",
-        color: globalColors.mainGreen,
+        color: 'white',
         marginBottom: 5,
     },
     areaInput: {

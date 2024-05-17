@@ -35,7 +35,6 @@ const Shop = ({ route }) => {
     return (
         <ScrollView style={styles.container}>
             <Header userID={userID}/>
-            <Text>UserID: {userID}</Text>
             <Categories onCategoryChange={handleCategoryChange} />
             <Product selectedCategory={selectedCategory} productData={productData} userID={userID} />
         </ScrollView>

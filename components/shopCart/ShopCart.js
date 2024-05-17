@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     View,
     Text,
@@ -6,150 +6,217 @@ import {
     StyleSheet,
     ScrollView,
     Image,
-    PanResponder,
-    TextInput
+    TextInput,
+    Dimensions,
+    Alert
 } from 'react-native';
 import { globalColors } from '../../styles/Colors';
 import BackBtn from '../backBtn';
+import { ipAddress } from '../../ip/ip';
+
+const windowHeight = Dimensions.get('window').height;
+const containerHeight = windowHeight - 60 - 260;
 
 const ShopCart = ({ navigation, route }) => {
-    const [showDeleteIcon, setShowDeleteIcon] = useState(false);
-    const [isChecked, setIsChecked] = useState(false);
-
-    const [quantity, setQuantity] = useState(1); // State để lưu số lượng
-
-    // Hàm xử lý tăng số lượng
-    const increaseQuantity = () => {
-        setQuantity(prevQuantity => prevQuantity + 1);
-    };
-
-    // Hàm xử lý giảm số lượng
-    const decreaseQuantity = () => {
-        if (quantity > 1) {
-            setQuantity(prevQuantity => prevQuantity - 1);
-        }
-    };
+    const [cartItems, setCartItems] = useState([]);
+    const [quantities, setQuantities] = useState({});
+    const [checkedItems, setCheckedItems] = useState({});
+    const [shippingFee, setShippingFee] = useState(20000);
+    const [showAlert, setShowAlert] = useState(false);
+    const [deleteItemId, setDeleteItemId] = useState(null);
 
     const userID = route.params?.userID || '';
 
-    const panResponder = PanResponder.create({
-        onStartShouldSetPanResponder: () => true,
-        onPanResponderMove: (evt, gestureState) => {
-            const { dx } = gestureState;
-            if (dx < -50) {
-                setShowDeleteIcon(true);
-            } else {
-                setShowDeleteIcon(false);
-            }
-        },
-        onPanResponderRelease: (evt, gestureState) => {
-            setShowDeleteIcon(false);
-        }
-    });
+    useEffect(() => {
+        fetchCartItems();
+    }, [userID]);
 
+    const fetchCartItems = () => {
+        fetch(`${ipAddress}/userCart?userID=${userID}`)
+            .then(response => response.json())
+            .then(data => {
+                setCartItems(data);
+                const initialQuantities = {};
+                data.forEach(item => {
+                    initialQuantities[item.UserCartID] = item.Quantity;
+                });
+                setQuantities(initialQuantities);
+            })
+            .catch(error => {
+                console.error('Error fetching cart data:', error);
+            });
+    };
+
+    const increaseQuantity = (itemID) => {
+        setQuantities(prevQuantities => {
+            const newQuantities = { ...prevQuantities, [itemID]: (prevQuantities[itemID] || 1) + 1 };
+            return newQuantities;
+        });
+    };
+
+    const decreaseQuantity = (itemID) => {
+        setQuantities(prevQuantities => {
+            const newQuantities = { ...prevQuantities, [itemID]: (prevQuantities[itemID] || 1) > 1 ? prevQuantities[itemID] - 1 : 1 };
+            return newQuantities;
+        });
+    };
+
+    const handleCheck = (itemID) => {
+        setCheckedItems(prevCheckedItems => ({
+            ...prevCheckedItems,
+            [itemID]: !prevCheckedItems[itemID],
+        }));
+    };
+
+    const handleQuantityChange = (itemID, newQuantity) => {
+        if (newQuantity === '') {
+            setQuantities(prevQuantities => {
+                const newQuantities = { ...prevQuantities, [itemID]: 0 };
+                return newQuantities;
+            });
+        } else {
+            const parsedQuantity = parseInt(newQuantity, 10);
+            if (!isNaN(parsedQuantity) && parsedQuantity >= 0) {
+                setQuantities(prevQuantities => {
+                    const newQuantities = { ...prevQuantities, [itemID]: parsedQuantity };
+                    return newQuantities;
+                });
+            }
+        }
+    };
+
+    const totalPrice = cartItems.reduce((total, item) => {
+        if (checkedItems[item.UserCartID]) {
+            return total + item.Price * (quantities[item.UserCartID] || 1);
+        }
+        return total;
+    }, 0);
+
+    const deleteCartItem = (userCartID) => {
+        setDeleteItemId(userCartID);
+        setShowAlert(true);
+    };
+
+    const confirmDelete = () => {
+        if (deleteItemId !== null) {
+            fetch(`${ipAddress}/delete-from-cart/${deleteItemId}`, {
+                method: 'DELETE',
+            })
+                .then(response => response.json())
+                .then(data => {
+                    fetchCartItems();
+                })
+                .catch(error => {
+                    console.error('Error deleting cart item:', error);
+                })
+                .finally(() => {
+                    setShowAlert(false);
+                    setDeleteItemId(null);
+                });
+        }
+    };
+
+    const totalPayment = totalPrice + shippingFee;
     return (
         <View>
             <BackBtn onPress={() => navigation.navigate('HomeTabs', { screen: 'Shop', params: { userID } })} userID={userID} />
             <View style={styles.header}>
                 <Text style={styles.title}>Giỏ hàng</Text>
-                <Text>UserID: {userID}</Text>
             </View>
             <ScrollView style={styles.container}>
                 <View style={styles.products}>
-                    <TouchableOpacity {...panResponder.panHandlers} style={styles.product}>
-                        <View style={styles.areaImg}>
-                            <Image source={require('../shop/images/test.jpg')} style={styles.img} />
-                        </View>
-                        <View style={styles.areaInfo}>
-                            <Text style={styles.textName}>Cây cà phê</Text>
-                            <Text style={styles.textPrice}>20.000 VNĐ</Text>
-                        </View>
-                        <View style={styles.handle}>
+                    {cartItems.map(item => (
+                        <View key={item.UserCartID} style={styles.product}>
                             <View style={styles.areaCheck}>
-                                <TouchableOpacity onPress={() => setIsChecked(!isChecked)}>
-                                    <View style={[styles.checkbox, isChecked && styles.checked]}>
+                                <TouchableOpacity onPress={() => handleCheck(item.UserCartID)}>
+                                    <View style={[styles.checkbox, checkedItems[item.UserCartID] && styles.checked]}>
                                         <Text style={styles.tick}>✔</Text>
                                     </View>
                                 </TouchableOpacity>
                             </View>
-                            <View style={styles.areaQuantity}>
-                                {/* Button giảm số lượng */}
-                                <TouchableOpacity style={styles.btnUpAnDown} onPress={decreaseQuantity}>
-                                    <Text style={styles.textBtnUpAnDown}>-</Text>
-                                </TouchableOpacity>
-                                <View style={styles.areaTextQuantity}>
-                                    {/* Hiển thị số lượng */}
-                                    <TextInput style={styles.textQuantity}>{quantity}</TextInput>
-                                </View>
-                                {/* Button tăng số lượng */}
-                                <TouchableOpacity style={styles.btnUpAnDown} onPress={increaseQuantity}>
-                                    <Text style={styles.textBtnUpAnDown}>+</Text>
-                                </TouchableOpacity>
+                            <View style={styles.areaImg}>
+                                <Image source={{ uri: item.Image }} style={styles.img} />
                             </View>
-                        </View>
-                        {showDeleteIcon && (
-                            <TouchableOpacity style={styles.deleteIconContainer}>
-                                <Image
-                                    source={{ uri: 'https://cdn-icons-png.flaticon.com/512/6861/6861362.png' }}
-                                    style={styles.deleteIcon}
-                                />
-                            </TouchableOpacity>
-                        )}
-                    </TouchableOpacity>
-                    <TouchableOpacity {...panResponder.panHandlers} style={styles.product}>
-                        <View style={styles.areaImg}>
-                            <Image source={require('../shop/images/test.jpg')} style={styles.img} />
-                        </View>
-                        <View style={styles.areaInfo}>
-                            <Text style={styles.textName}>Cây cà phê</Text>
-                            <Text style={styles.textPrice}>20.000 VNĐ</Text>
-                        </View>
-                        <View style={styles.handle}>
-                            <View style={styles.areaCheck}>
-                                <TouchableOpacity onPress={() => setIsChecked(!isChecked)}>
-                                    <View style={[styles.checkbox, isChecked && styles.checked]}>
-                                        <Text style={styles.tick}>✔</Text>
+                            <View style={styles.areaInfo}>
+                                <Text style={styles.textName}>{item.ProductName}</Text>
+                                <Text style={styles.textPrice}>{item.Price.toLocaleString()} VNĐ</Text>
+                            </View>
+                            <View style={styles.handle}>
+                                <View style={styles.deleteIconContainer}>
+                                    <TouchableOpacity onPress={() => deleteCartItem(item.UserCartID)}>
+                                        <Image
+                                            source={{ uri: 'https://cdn-icons-png.flaticon.com/512/6861/6861362.png' }}
+                                            style={styles.deleteIcon}
+                                        />
+                                    </TouchableOpacity>
+                                </View>
+                                <View style={styles.areaQuantity}>
+                                    <TouchableOpacity style={styles.btnUpAnDown} onPress={() => decreaseQuantity(item.UserCartID)}>
+                                        <Text style={styles.textBtnUpAnDown}>-</Text>
+                                    </TouchableOpacity>
+                                    <View style={styles.areaTextQuantity}>
+                                        <TextInput
+                                            style={styles.textQuantity}
+                                            keyboardType="numeric"
+                                            value
+                                            ={String(quantities[item.UserCartID])}
+                                            onChangeText={(text) => handleQuantityChange(item.UserCartID, text)}
+                                        />
                                     </View>
-                                </TouchableOpacity>
-                            </View>
-                            <View style={styles.areaQuantity}>
-                                {/* Button giảm số lượng */}
-                                <TouchableOpacity style={styles.btnUpAnDown} onPress={decreaseQuantity}>
-                                    <Text style={styles.textBtnUpAnDown}>-</Text>
-                                </TouchableOpacity>
-                                <View style={styles.areaTextQuantity}>
-                                    {/* Hiển thị số lượng */}
-                                    <TextInput style={styles.textQuantity}>{quantity}</TextInput>
+                                    <TouchableOpacity style={styles.btnUpAnDown} onPress={() => increaseQuantity(item.UserCartID)}>
+                                        <Text style={styles.textBtnUpAnDown}>+</Text>
+                                    </TouchableOpacity>
                                 </View>
-                                {/* Button tăng số lượng */}
-                                <TouchableOpacity style={styles.btnUpAnDown} onPress={increaseQuantity}>
-                                    <Text style={styles.textBtnUpAnDown}>+</Text>
-                                </TouchableOpacity>
                             </View>
                         </View>
-                        {showDeleteIcon && (
-                            <TouchableOpacity style={styles.deleteIconContainer}>
-                                <Image
-                                    source={{ uri: 'https://cdn-icons-png.flaticon.com/512/6861/6861362.png' }}
-                                    style={styles.deleteIcon}
-                                />
-                            </TouchableOpacity>
-                        )}
-                    </TouchableOpacity>
+                    ))}
                 </View>
             </ScrollView>
-
-            <View style={{ padding: 20, zIndex: 1 }}>
-                <View style={styles.price}>
-                    <Text style={styles.text1}>Tổng tiền:</Text>
-                    <Text style={styles.text2}>200.000 VNĐ</Text>
+            <View style={styles.bottom}>
+                <View style={styles.priceProduct}>
+                    <Text style={styles.text1}>Tổng tiền hàng:</Text>
+                    <Text style={styles.text2}>
+                        {totalPrice.toLocaleString()} VNĐ
+                    </Text>
+                </View>
+                <View style={styles.priceProduct}>
+                    <Text style={styles.text1}>Phí vận chuyển:</Text>
+                    <Text style={styles.text2}>
+                        {shippingFee.toLocaleString()} VNĐ
+                    </Text>
+                </View>
+                <View style={styles.priceProduct}>
+                    <Text style={styles.text1}>Tổng thanh toán:</Text>
+                    <Text style={styles.text2}>
+                        {totalPayment.toLocaleString()} VNĐ
+                    </Text>
                 </View>
                 <View style={styles.areaBtn}>
-                    <TouchableOpacity style={styles.btn}>
+                    <TouchableOpacity
+                        style={styles.btn}
+                        onPress={() => {
+                            navigation.navigate('Info');
+                        }}
+                    >
                         <Text style={styles.textBtn}>Mua hàng</Text>
                     </TouchableOpacity>
                 </View>
             </View>
+            {showAlert && (
+                <View style={styles.alertContainer}>
+                    <View style={styles.alert}>
+                        <Text style={styles.alertText}>Bạn có muốn xóa sản phẩm này?</Text>
+                        <View style={styles.alertButtons}>
+                            <TouchableOpacity style={styles.alertButton} onPress={() => setShowAlert(false)}>
+                                <Text style={{color: 'black', fontSize: 16}}>Cancel</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={[styles.alertButton, styles.alertButtonConfirm]} onPress={confirmDelete}>
+                                <Text style={styles.alertButtonText}>OK</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            )}
         </View>
     );
 }
@@ -159,16 +226,16 @@ export default ShopCart;
 const styles = StyleSheet.create({
     container: {
         width: '100%',
-        height: 500,
-        paddingHorizontal: 20,
+        height: containerHeight,
+        paddingHorizontal: 15,
         backgroundColor: '#d9d9d9'
     },
     header: {
+        position: 'absolute',
         width: '100%',
-        height: 40,
-        justifyContent: 'center',
+        height: 60,
         alignItems: 'center',
-        marginBottom: 20
+        justifyContent: 'center',
     },
     title: {
         fontSize: 26,
@@ -189,10 +256,16 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         flexDirection: 'row'
     },
-    price: {
+    bottom: {
+        height: 220,
+        justifyContent: 'flex-end',
+        padding: 20,
+        zIndex: 1
+    },
+    priceProduct: {
         width: '100%',
         flexDirection: 'row',
-        marginBottom: 20
+        marginBottom: 15
     },
     text1: {
         fontSize: 20,
@@ -206,7 +279,8 @@ const styles = StyleSheet.create({
     areaBtn: {
         width: '100%',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        top: 10
     },
     btn: {
         width: '80%',
@@ -214,7 +288,8 @@ const styles = StyleSheet.create({
         backgroundColor: globalColors.mainGreen,
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 30
+        borderRadius: 30,
+        elevation: 5
     },
     textBtn: {
         fontSize: 20,
@@ -233,7 +308,7 @@ const styles = StyleSheet.create({
         borderRadius: 20
     },
     areaInfo: {
-        width: '40%',
+        width: '33%',
         height: '100%',
         overflow: 'hidden',
         justifyContent: 'center'
@@ -251,10 +326,10 @@ const styles = StyleSheet.create({
         height: '100%',
     },
     areaCheck: {
-        width: '100%',
-        alignItems: 'flex-end',
-        marginTop: 10,
-        paddingRight: 5
+        width: '7%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        left: 5
     },
     checkbox: {
         width: 24,
@@ -302,9 +377,52 @@ const styles = StyleSheet.create({
     textQuantity: {
         fontSize: 20,
         height: 50,
+        textAlign: 'center'
+    },
+    deleteIconContainer: {
+        width: '100%',
+        alignItems: 'flex-end',
+        padding: 10
     },
     deleteIcon: {
-        width: 30,
-        height: 30
-    }
+        width: 24,
+        height: 24
+    },
+    alertContainer: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: -20,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    alert: {
+        width: 300,
+        backgroundColor: 'white',
+        padding: 20,
+        borderRadius: 10,
+    },
+    alertText: {
+        fontSize: 18,
+        marginBottom: 20,
+    },
+    alertButtons: {
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+    },
+    alertButton: {
+        paddingHorizontal: 15,
+        paddingVertical: 8,
+        marginLeft: 10,
+        borderRadius: 5,
+    },
+    alertButtonConfirm: {
+        backgroundColor: 'red',
+    },
+    alertButtonText: {
+        fontSize: 16,
+        color: 'white',
+    },
 });

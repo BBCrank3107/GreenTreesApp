@@ -22,9 +22,9 @@ import WaterTheTree from './home/components/menuItems/WaterTheTree';
 import PlantPreservation from './home/components/menuItems/PlantPreservation';
 import PlantPackaging from './home/components/menuItems/PlantPackaging';
 import ChangePass from './account/components/ChangePass';
-import InfoAccount from './account/components/InfoAccount';
 import Calculator from './account/components/calculator/Calculator';
 import InfoProduct from './shop/InfoProduct';
+import Info from './shopCart/Info';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -133,10 +133,10 @@ export default RootComponent = function () {
                 <Stack.Screen name="PlantPreservation" component={PlantPreservation} />
                 <Stack.Screen name="PlantPackaging" component={PlantPackaging} />
                 <Stack.Screen name="ChangePass" component={ChangePass} />
-                <Stack.Screen name="InfoAccount" component={InfoAccount} />
                 <Stack.Screen name="Calculator" component={Calculator} />
                 <Stack.Screen name="ShopCart" component={ShopCart} />
                 <Stack.Screen name="InfoProduct" component={InfoProduct} />
+                <Stack.Screen name="Info" component={Info} />
             </Stack.Navigator>
         </NavigationContainer>
     )
