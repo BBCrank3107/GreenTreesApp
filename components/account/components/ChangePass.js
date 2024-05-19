@@ -150,10 +150,11 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 25,
     alignItems: "center",
+    elevation: 5
   },
   buttonText: {
     color: "#fff",
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: "bold",
   },
 });

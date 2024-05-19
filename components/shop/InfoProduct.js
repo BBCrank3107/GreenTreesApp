@@ -16,7 +16,7 @@ import { globalColors } from "../../styles/Colors";
 import { ipAddress } from "../../ip/ip";
 
 export default function InfoProduct({ route, navigation }) {
-    const { productInfo, productName, productImage, productPrice, productPlantID, productData, productStatus,userID } = route.params;
+    const { productInfo, productName, productImage, productPrice, productPlantID, productStatus, userID } = route.params;
 
     const [quantity, setQuantity] = useState(0);
 
@@ -134,8 +134,11 @@ export default function InfoProduct({ route, navigation }) {
                         )}
                     </View>
                 </View>
-
-                <ProductSimilar productData={route.params.productData} plantID={productPlantID} navigation={navigation} userID={userID} />
+                <ProductSimilar
+                    plantID={productPlantID}
+                    navigation={navigation}
+                    userID={userID}
+                />
             </ScrollView>
             <View style={styles.bottom}>
                 <View style={styles.areaPricePlant}>

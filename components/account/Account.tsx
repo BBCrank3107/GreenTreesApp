@@ -11,7 +11,7 @@ import { globalColors } from '../../styles/Colors';
 
 const Account = ({ navigation, route }: any) => {
     const userEmail = route.params?.userEmail || '';
-    const userID = route.params?.userID || '';  // Get the userID from route params
+    const userID = route.params?.userID || '';
 
     const menuItems = [
         {
@@ -21,6 +21,10 @@ const Account = ({ navigation, route }: any) => {
         {
             title: "Bảo mật",
             subItems: ["Đổi mật khẩu"],
+        },
+        {
+            title: "Liên hệ",
+            subItems: ["Hỗ trợ"],
         },
         {
             title: "Khác",
@@ -41,9 +45,11 @@ const Account = ({ navigation, route }: any) => {
 
     const handleSubItemPress = (subItem: string) => {
         if (subItem === 'Đổi mật khẩu') {
-            navigation.navigate('ChangePass', { userID });  // Pass userID when navigating
+            navigation.navigate('ChangePass', { userID });
         } else if (subItem === 'Máy tính') {
-            navigation.navigate('Calculator');
+            navigation.navigate('Calculator', {userID});
+        } else if (subItem === 'Hỗ trợ') {
+            navigation.navigate('Support', { userID });
         }
     };
 
@@ -132,7 +138,7 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         backgroundColor: 'white',
         marginRight: 10,
-        justifyContent: 'center', 
+        justifyContent: 'center',
         alignItems: 'center',
         overflow: 'hidden',
         elevation: 10

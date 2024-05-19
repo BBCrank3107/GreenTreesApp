@@ -150,32 +150,142 @@ app.get('/category/plants', (req, res) => {
 });
 
 // Select full data product
-app.get('/category/plant/product', (req, res) => {
+app.get("/category/plant/product", (req, res) => {
     let sql = `
-                SELECT 
-                c.CategoryID,
-                c.CategoryName,
-                p.PlantID,
-                p.PlantName,
-                pr.ProductID,
-                pr.ProductName,
-                pr.Price,
-                pr.ProductInfo,
-                pr.Image,
-                pr.Status
-                FROM 
-                    category c
-                JOIN 
-                    plant p ON c.CategoryID = p.CategoryID
-                JOIN 
-                    product pr ON p.PlantID = pr.PlantID`;
+                  SELECT 
+                  c.CategoryID,
+                  c.CategoryName,
+                  p.PlantID,
+                  p.PlantName,
+                  pr.ProductID,
+                  pr.ProductName,
+                  pr.Price,
+                  pr.ProductInfo,
+                  pr.Status,
+                  pr.Image
+                  FROM 
+                      category c
+                  JOIN 
+                      plant p ON c.CategoryID = p.CategoryID
+                  JOIN 
+                      product pr ON p.PlantID = pr.PlantID`;
     db.query(sql, (err, result) => {
         if (err) {
-            res.status(500).send({ message: 'Error retrieving data' });
+            res.status(500).send({ message: "Error retrieving data" });
             throw err;
         }
         res.status(200).send(result);
     });
+});
+
+// Search endpoint
+app.get("/search", (req, res) => {
+    const searchQuery = req.query.q;
+    const sql = `
+      SELECT 
+        c.CategoryID,
+        c.CategoryName,
+        p.PlantID,
+        p.PlantName,
+        pr.ProductID,
+        pr.ProductName,
+        pr.Price,
+        pr.ProductInfo,
+        pr.Status,
+        pr.Image
+      FROM 
+        category c
+      JOIN 
+        plant p ON c.CategoryID = p.CategoryID
+      JOIN 
+        product pr ON p.PlantID = pr.PlantID
+      WHERE 
+        pr.ProductName LIKE ?`;
+
+    db.query(sql, [`%${searchQuery}%`], (err, result) => {
+        if (err) {
+            res.status(500).send({ message: "Error retrieving data" });
+            throw err;
+        }
+        res.status(200).send(result);
+    });
+});
+
+// Select full data product
+app.get("/category/plant/product", (req, res) => {
+    let sql = `
+                  SELECT 
+                  c.CategoryID,
+                  c.CategoryName,
+                  p.PlantID,
+                  p.PlantName,
+                  pr.ProductID,
+                  pr.ProductName,
+                  pr.Price,
+                  pr.ProductInfo,
+                  pr.Status
+                  pr.Image
+                  FROM 
+                      category c
+                  JOIN 
+                      plant p ON c.CategoryID = p.CategoryID
+                  JOIN 
+                      product pr ON p.PlantID = pr.PlantID`;
+    db.query(sql, (err, result) => {
+        if (err) {
+            res.status(500).send({ message: "Error retrieving data" });
+            throw err;
+        }
+        res.status(200).send(result);
+    });
+});
+
+// Add a new endpoint to handle products by categoryId
+app.get("/api/products/:categoryId", async (req, res) => {
+    try {
+        const categoryId = req.params.categoryId;
+        const sql = `
+          SELECT *
+          FROM product
+          WHERE PlantID IN (
+              SELECT PlantID
+              FROM plant
+              WHERE CategoryID = ?
+          )
+      `;
+        db.query(sql, [categoryId], (err, result) => {
+            if (err) {
+                res.status(500).send({ message: "Error retrieving data" });
+                throw err;
+            }
+            res.status(200).json(result); // Trả lại dữ liệu sản phẩm dưới dạng JSON
+        });
+    } catch (error) {
+        console.error("Error fetching products:", error);
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
+// Add a new endpoint to handle products by PlantID
+app.get("/products/byPlant/:plantId", async (req, res) => {
+    try {
+        const plantId = req.params.plantId;
+        const sql = `
+          SELECT *
+          FROM product
+          WHERE PlantID = ?
+      `;
+        db.query(sql, [plantId], (err, result) => {
+            if (err) {
+                res.status(500).send({ message: "Error retrieving data" });
+                throw err;
+            }
+            res.status(200).json(result);
+        });
+    } catch (error) {
+        console.error("Error fetching products:", error);
+        res.status(500).json({ error: "Server error" });
+    }
 });
 
 app.post('/add-to-cart', (req, res) => {
@@ -233,6 +343,49 @@ app.delete('/delete-from-cart/:userCartID', (req, res) => {
             throw deleteErr;
         }
         res.status(200).send({ success: true, message: 'Xóa sản phẩm khỏi giỏ hàng thành công' });
+    });
+});
+
+// Purchase endpoint
+app.post('/purchase', (req, res) => {
+    const { name, email, phone, address, city, district, ward } = req.body;
+
+    const formattedAddress = `${address}, ${ward}, ${district}, ${city}`;
+    const currentDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
+
+    const insertSql = 'INSERT INTO seller (UserName, UserNumber, UserAddress, UserEmail, DateOrder, ProductName, Price, Quantity, Status, UserID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    db.query(insertSql, [name, phone, formattedAddress, email, currentDate, req.body.ProductName, req.body.Price, req.body.Quantity, 'Đang xử lý', req.body.UserID], (insertErr, insertResult) => {
+        if (insertErr) {
+            res.status(500).send({ success: false, message: 'Failed to make purchase' });
+            throw insertErr;
+        }
+
+        const deleteSql = 'DELETE FROM user_cart WHERE ProductName = ? AND UserID = ?';
+        db.query(deleteSql, [req.body.ProductName, req.body.UserID], (deleteErr, deleteResult) => {
+            if (deleteErr) {
+                res.status(500).send({ success: false, message: 'Failed to delete from cart' });
+                throw deleteErr;
+            }
+            res.status(200).send({ success: true, message: 'Mua hàng thành công và xóa khỏi giỏ hàng' });
+        });
+    });
+});
+
+// New endpoint for submitting support requests
+app.post('/support', (req, res) => {
+    const { UserName, UserNumber, UserEmail, Content, UserID } = req.body;
+
+    if (!UserName || !UserNumber || !UserEmail || !Content || !UserID) {
+        return res.status(400).send({ success: false, message: 'All fields are required' });
+    }
+
+    const insertSql = 'INSERT INTO contact (UserName, UserNumber, UserEmail, Content, UserID) VALUES (?, ?, ?, ?, ?)';
+    db.query(insertSql, [UserName, UserNumber, UserEmail, Content, UserID], (insertErr, insertResult) => {
+        if (insertErr) {
+            res.status(500).send({ success: false, message: 'Failed to submit support request' });
+            throw insertErr;
+        }
+        res.status(200).send({ success: true, message: 'Support request submitted successfully' });
     });
 });
 

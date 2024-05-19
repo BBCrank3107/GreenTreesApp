@@ -5,13 +5,14 @@ import { ThemeContext } from './src/context/ThemeContext';
 import MyKeyboard from './src/components/MyKeyboard';
 import BackBtn from '../../../backBtn';
 
-export default function Calculator({ navigation }: any) {
+export default function Calculator({ navigation, route }: any) {
+  const userID = route.params?.userID || '';
   const [theme, setTheme] = useState('light');
   return (
     <ThemeContext.Provider value={theme}>
       <SafeAreaView style={theme === 'light' ? styles.container : [styles.container, { backgroundColor: 'black' }]}>
         <View style={{ height: 50, width: '100%', justifyContent: 'center'}}>
-          <BackBtn onPress={() => {navigation.navigate('Account')}}/>
+          <BackBtn onPress={() => {navigation.navigate('Account', {userID})}}/>
         </View>
         <Switch
           value={theme === 'dark'}

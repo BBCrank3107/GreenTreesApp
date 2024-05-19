@@ -1,35 +1,64 @@
-import React from 'react';
-import { View, Text, ScrollView, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from "react";
+import {
+    View,
+    Text,
+    ScrollView,
+    Image,
+    TouchableOpacity,
+    StyleSheet,
+} from "react-native";
+import { ipAddress } from "../../ip/ip";
 
-const ProductSimilar = ({ plantID, productData, userID, navigation }) => {
-    const similarProducts = productData.filter(product => product.PlantID === plantID);
+const ProductSimilar = ({ plantID, userID, navigation }) => {
+    const [productSimilar, setProductSimilar] = useState([]);
+
+    useEffect(() => {
+        if (plantID) {
+            fetchData();
+        }
+    }, [plantID]);
+
+    const fetchData = async () => {
+        try {
+            const response = await fetch(`${ipAddress}/products/byPlant/${plantID}`);
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            const data = await response.json();
+            console.log("Fetched data:", data);
+            setProductSimilar(data);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
 
     const restartInfoProduct = (product) => {
         navigation.reset({
             index: 0,
-            routes: [{
-                name: 'InfoProduct', params: {
-                    productInfo: product.ProductInfo,
-                    productName: product.ProductName,
-                    productImage: product.Image,
-                    productPrice: product.Price,
-                    productPlantID: product.PlantID,
-                    productData: productData.filter(item => item.ProductID !== product.ProductID),
-                    userID: userID
-                }
-            }],
+            routes: [
+                {
+                    name: "InfoProduct",
+                    params: {
+                        productInfo: product.ProductInfo,
+                        productName: product.ProductName,
+                        productImage: product.Image,
+                        productPrice: product.Price,
+                        productPlantID: product.PlantID,
+                        productID: product.ProductID,
+                        productStatus:product.Status,
+                        userID: userID,
+                    },
+                },
+            ],
         });
     };
 
     return (
         <View style={styles.areaProductSimilar}>
             <Text style={styles.detailTitle}>Sản phẩm tương tự</Text>
-            <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-            >
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 <View style={styles.boxImgSimilar}>
-                    {similarProducts.map((product, index) => (
+                    {productSimilar.map((product, index) => (
                         <TouchableOpacity
                             key={index}
                             style={styles.product}
@@ -46,7 +75,7 @@ const ProductSimilar = ({ plantID, productData, userID, navigation }) => {
                                 <TouchableOpacity style={styles.underRightImg}>
                                     <Image
                                         style={styles.addProduct}
-                                        source={require('./images/add.png')}
+                                        source={require("./images/add.png")}
                                     />
                                 </TouchableOpacity>
                             </View>
@@ -56,7 +85,7 @@ const ProductSimilar = ({ plantID, productData, userID, navigation }) => {
             </ScrollView>
         </View>
     );
-}
+};
 
 export default ProductSimilar;
 
@@ -81,29 +110,29 @@ const styles = StyleSheet.create({
         backgroundColor: "#F8FAF5",
         borderRadius: 15,
         elevation: 2,
-        overflow: 'hidden',
+        overflow: "hidden",
         marginVertical: 10,
-        marginLeft: 20
+        marginLeft: 20,
     },
     areaImg: {
-        width: '100%',
+        width: "100%",
         height: 160,
-        overflow: 'hidden',
+        overflow: "hidden",
         borderBottomEndRadius: 100,
-        justifyContent: 'center',
-        alignItems: 'center'
+        justifyContent: "center",
+        alignItems: "center",
     },
     img: {
-        width: '100%',
-        height: '100%'
+        width: "100%",
+        height: "100%",
     },
     underImg: {
         width: "100%",
         height: 70,
         flexDirection: "row",
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: 10
+        justifyContent: "space-between",
+        alignItems: "center",
+        padding: 10,
     },
     addProduct: {
         width: 25,
@@ -120,7 +149,10 @@ const styles = StyleSheet.create({
         fontWeight: "500",
     },
     underLeftImg: {
-        flexDirection: 'column',
+        flexDirection: "column",
+    },
+    underRightImg: {
+        justifyContent: "center",
+        alignItems: "center",
     },
 });
-

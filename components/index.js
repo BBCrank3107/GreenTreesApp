@@ -7,7 +7,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import {globalColors} from '../styles/Colors'
+import { globalColors } from '../styles/Colors'
 
 import Login from './login/Login';
 import Home from './home/Home';
@@ -24,7 +24,8 @@ import PlantPackaging from './home/components/menuItems/PlantPackaging';
 import ChangePass from './account/components/ChangePass';
 import Calculator from './account/components/calculator/Calculator';
 import InfoProduct from './shop/InfoProduct';
-import Info from './shopCart/Info';
+import purchaseInfor from './shopCart/purchaseInfor';
+import Support from './account/components/Support';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -136,7 +137,8 @@ export default RootComponent = function () {
                 <Stack.Screen name="Calculator" component={Calculator} />
                 <Stack.Screen name="ShopCart" component={ShopCart} />
                 <Stack.Screen name="InfoProduct" component={InfoProduct} />
-                <Stack.Screen name="Info" component={Info} />
+                <Stack.Screen name="purchaseInfor" component={purchaseInfor} />
+                <Stack.Screen name="Support" component={Support} />
             </Stack.Navigator>
         </NavigationContainer>
     )

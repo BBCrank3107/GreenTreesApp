@@ -1,32 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { Text, ScrollView, TouchableOpacity, StyleSheet, View } from 'react-native';
-import { globalColors } from '../../../styles/Colors';
-import { ipAddress } from '../../../ip/ip';
+import React, { useState, useEffect } from "react";
+import {
+    Text,
+    ScrollView,
+    TouchableOpacity,
+    StyleSheet,
+    View,
+} from "react-native";
+import { globalColors } from "../../../styles/Colors";
+import { ipAddress } from "../../../ip/ip";
 
-const Categories = ({ onCategoryChange }) => { // Thêm props onCategoryChange để thông báo khi danh mục thay đổi
-    const [selectedCategory, setSelectedCategory] = useState("All");
-    const [categoriesData, setCategoriesData] = useState([]);
-
-    const handleCategoryPress = (category) => {
-        setSelectedCategory(category);
-        onCategoryChange(category); // Gửi thông báo về việc thay đổi danh mục
+const Categories = ({ onCategoryChange, categoriesData, selectedCategory }) => {
+    const handleAllPress = () => {
+        onCategoryChange("All");
     };
 
-    useEffect(() => {
-        fetchData();
-    }, [])
-
-    const fetchData = async () => {
-        try {
-            const response = await fetch(`${ipAddress}/category`);
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            const data = await response.json();
-            setCategoriesData(data);
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
+    const handleCategoryPress = (categoryID) => {
+        onCategoryChange(categoryID);
     };
 
     return (
@@ -42,7 +31,7 @@ const Categories = ({ onCategoryChange }) => { // Thêm props onCategoryChange �
                                     backgroundColor: globalColors.mainGreen,
                                 },
                             ]}
-                            onPress={() => handleCategoryPress("All")}
+                            onPress={handleAllPress}
                         >
                             <Text
                                 style={[
@@ -53,23 +42,25 @@ const Categories = ({ onCategoryChange }) => { // Thêm props onCategoryChange �
                                 All
                             </Text>
                         </TouchableOpacity>
-                        
+
                         {categoriesData.map((category, index) => (
                             <TouchableOpacity
                                 key={category.CategoryID}
                                 style={[
                                     styles.btncate,
-                                    selectedCategory === category.CategoryName && {
+                                    selectedCategory === category.CategoryID && {
                                         backgroundColor: globalColors.mainGreen,
                                     },
-                                    index === categoriesData.length - 1 && { marginRight: 15 }, // Kiểm tra xem có phải phần tử cuối cùng không
+                                    index === categoriesData.length - 1 && { marginRight: 15 },
                                 ]}
-                                onPress={() => handleCategoryPress(category.CategoryName)}
+                                onPress={() => handleCategoryPress(category.CategoryID)}
                             >
                                 <Text
                                     style={[
                                         styles.textcategrory,
-                                        selectedCategory === category.CategoryName && { color: "white" },
+                                        selectedCategory === category.CategoryID && {
+                                            color: "white",
+                                        },
                                     ]}
                                 >
                                     {category.CategoryName}
@@ -81,7 +72,7 @@ const Categories = ({ onCategoryChange }) => { // Thêm props onCategoryChange �
             </View>
         </View>
     );
-}
+};
 
 export default Categories;
 
@@ -90,7 +81,7 @@ const styles = StyleSheet.create({
         width: "100%",
         height: 90,
         flexDirection: "column",
-        marginBottom: 5
+        marginBottom: 5,
     },
     textCate: {
         height: "40%",
@@ -98,7 +89,7 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: "600",
         marginBottom: 10,
-        color: globalColors.mainGreen
+        color: globalColors.mainGreen,
     },
     showCategory: {
         height: "100%",
@@ -114,6 +105,6 @@ const styles = StyleSheet.create({
     textcategrory: {
         color: "gray",
         fontWeight: "500",
-        fontSize: 14
+        fontSize: 14,
     },
 });

@@ -116,6 +116,21 @@ const ShopCart = ({ navigation, route }) => {
         }
     };
 
+    const handlePurchase = () => {
+        const selectedItems = cartItems.filter(item => checkedItems[item.UserCartID]).map(item => ({
+            ProductName: item.ProductName,
+            Quantity: quantities[item.UserCartID],
+            Price: item.Price,
+        }));
+        navigation.navigate('purchaseInfor', {
+            selectedItems,
+            totalPrice,
+            shippingFee,
+            totalPayment: totalPrice + shippingFee,
+            userID
+        });
+    };
+
     const totalPayment = totalPrice + shippingFee;
     return (
         <View>
@@ -158,8 +173,7 @@ const ShopCart = ({ navigation, route }) => {
                                         <TextInput
                                             style={styles.textQuantity}
                                             keyboardType="numeric"
-                                            value
-                                            ={String(quantities[item.UserCartID])}
+                                            value={String(quantities[item.UserCartID])}
                                             onChangeText={(text) => handleQuantityChange(item.UserCartID, text)}
                                         />
                                     </View>
@@ -194,9 +208,7 @@ const ShopCart = ({ navigation, route }) => {
                 <View style={styles.areaBtn}>
                     <TouchableOpacity
                         style={styles.btn}
-                        onPress={() => {
-                            navigation.navigate('Info');
-                        }}
+                        onPress={handlePurchase}
                     >
                         <Text style={styles.textBtn}>Mua hàng</Text>
                     </TouchableOpacity>
@@ -208,7 +220,7 @@ const ShopCart = ({ navigation, route }) => {
                         <Text style={styles.alertText}>Bạn có muốn xóa sản phẩm này?</Text>
                         <View style={styles.alertButtons}>
                             <TouchableOpacity style={styles.alertButton} onPress={() => setShowAlert(false)}>
-                                <Text style={{color: 'black', fontSize: 16}}>Cancel</Text>
+                                <Text style={{ color: 'black', fontSize: 16 }}>Cancel</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={[styles.alertButton, styles.alertButtonConfirm]} onPress={confirmDelete}>
                                 <Text style={styles.alertButtonText}>OK</Text>
@@ -220,7 +232,6 @@ const ShopCart = ({ navigation, route }) => {
         </View>
     );
 }
-
 export default ShopCart;
 
 const styles = StyleSheet.create({
