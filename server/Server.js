@@ -389,6 +389,56 @@ app.post('/support', (req, res) => {
     });
 });
 
+// Get user information by UserID
+app.get('/user/:userID', (req, res) => {
+    const { userID } = req.params;
+    const sql = `SELECT UserName, Sex, Birthday, Number, UserEmail FROM user WHERE UserID = ?`;
+    
+    db.query(sql, [userID], (err, result) => {
+        if (err) {
+            res.status(500).send({ message: 'Error retrieving data' });
+            throw err;
+        }
+        if (result.length > 0) {
+            res.status(200).send(result[0]);
+        } else {
+            res.status(404).send({ message: 'User not found' });
+        }
+    });
+});
+
+app.post('/user/:userID', (req, res) => {
+    const { userID } = req.params;
+    const fields = req.body;
+
+    const allowedFields = ['UserName', 'Sex', 'Birthday', 'Number', 'UserEmail'];
+    const updates = Object.keys(fields)
+        .filter(key => allowedFields.includes(key))
+        .map(key => `${key} = ?`)
+        .join(', ');
+
+    if (updates.length === 0) {
+        return res.status(400).send({ message: 'No valid fields to update' });
+    }
+
+    const values = Object.values(fields);
+    values.push(userID);
+
+    const sql = `UPDATE user SET ${updates} WHERE UserID = ?`;
+
+    db.query(sql, values, (err, result) => {
+        if (err) {
+            res.status(500).send({ message: 'Error updating data' });
+            throw err;
+        }
+        if (result.affectedRows > 0) {
+            res.status(200).send({ message: 'User updated successfully' });
+        } else {
+            res.status(404).send({ message: 'User not found' });
+        }
+    });
+});
+
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });

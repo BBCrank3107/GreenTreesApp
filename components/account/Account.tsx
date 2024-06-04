@@ -19,8 +19,8 @@ const Account = ({ navigation, route }: any) => {
             subItems: ["Máy tính"],
         },
         {
-            title: "Bảo mật",
-            subItems: ["Đổi mật khẩu"],
+            title: "Tài khoản và bảo mật",
+            subItems: ["Thông tin tài khoản", "Đổi mật khẩu"],
         },
         {
             title: "Liên hệ",
@@ -47,9 +47,11 @@ const Account = ({ navigation, route }: any) => {
         if (subItem === 'Đổi mật khẩu') {
             navigation.navigate('ChangePass', { userID });
         } else if (subItem === 'Máy tính') {
-            navigation.navigate('Calculator', {userID});
+            navigation.navigate('Calculator', { userID });
         } else if (subItem === 'Hỗ trợ') {
             navigation.navigate('Support', { userID });
+        } else if (subItem === 'Thông tin tài khoản') {
+            navigation.navigate('InfoAccount', { userID });
         }
     };
 
