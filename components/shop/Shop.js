@@ -45,8 +45,6 @@ const Shop = ({ route }) => {
                 throw new Error("Không lấy được dat file cate");
             }
             const data = await response.json();
-            console.log("data:", data);
-
             setCategoriesData(data);
         } catch (error) {
             console.error("Error fetching categories data:", error);

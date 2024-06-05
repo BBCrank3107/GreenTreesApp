@@ -121,6 +121,7 @@ const ShopCart = ({ navigation, route }) => {
             ProductName: item.ProductName,
             Quantity: quantities[item.UserCartID],
             Price: item.Price,
+            Image: item.Image
         }));
         navigation.navigate('purchaseInfor', {
             selectedItems,

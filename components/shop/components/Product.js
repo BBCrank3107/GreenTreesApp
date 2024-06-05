@@ -30,7 +30,6 @@ const Product = ({ selectedCategory, userID, setSelectedCategory }) => {
                 throw new Error("Error fetching all products");
             }
             const data = await response.json();
-            console.log("All products data:");
             setFilteredProductData(data);
         } catch (error) {
             console.error("Error fetching data:", error);
@@ -39,7 +38,6 @@ const Product = ({ selectedCategory, userID, setSelectedCategory }) => {
 
     const fetchProductsByCategory = async (category) => {
         try {
-            console.log("Category:", category);
             const response = await fetch(`${ipAddress}/api/products/${category}`);
             if (!response.ok) {
                 throw new Error("Error fetching products by category");

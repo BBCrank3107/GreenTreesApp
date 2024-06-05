@@ -5,7 +5,8 @@ import {
     Text,
     TouchableOpacity,
     Image,
-    TextInput
+    TextInput,
+    Alert,
 } from "react-native";
 import DatePicker from 'react-native-date-picker';
 import Modal from 'react-native-modal';
@@ -23,7 +24,6 @@ const InfoAccount = ({ navigation, route }) => {
     const [isDatePickerVisible, setDatePickerVisible] = useState(false);
 
     useEffect(() => {
-        // Fetch user information from server
         fetch(`${ipAddress}/user/${userID}`)
             .then(response => response.json())
             .then(data => setUserInfo(data))
@@ -44,6 +44,17 @@ const InfoAccount = ({ navigation, route }) => {
     };
 
     const handleSavePress = (field, value) => {
+        // Validation
+        if (field === 'Number' && !/^\d{10}$/.test(value)) {
+            Alert.alert('Lỗi!', 'Số điện thoại không hợp lệ!');
+            return;
+        }
+
+        if (field === 'UserEmail' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+            Alert.alert('Lỗi!', 'Email không hợp lệ!');
+            return;
+        }
+
         const updatedInfo = { [field]: value };
 
         setUserInfo(prevState => ({ ...prevState, ...updatedInfo }));
@@ -102,6 +113,9 @@ const InfoAccount = ({ navigation, route }) => {
                                 <TouchableOpacity onPress={() => setDatePickerVisible(true)}>
                                     <Text style={styles.text}>Chọn ngày</Text>
                                 </TouchableOpacity>
+                                <TouchableOpacity onPress={() => handleCancelPress(field)}>
+                                    <Image source={require('../images/icons/cancel.png')} style={styles.icon} />
+                                </TouchableOpacity>
                                 <Modal isVisible={isDatePickerVisible}>
                                     <View style={styles.modalContent}>
                                         <DatePicker
@@ -130,8 +144,9 @@ const InfoAccount = ({ navigation, route }) => {
                                     value={editValues[field]}
                                     onChangeText={(text) => setEditValues(prevState => ({ ...prevState, [field]: text }))}
                                     onSubmitEditing={(e) => handleSavePress(field, e.nativeEvent.text)}
+                                    keyboardType={field === 'Number' ? 'numeric' : 'default'}
                                 />
-                                {['UserName', 'Number'].includes(field) && (
+                                {['UserName', 'Number', 'UserEmail'].includes(field) && (
                                     <>
                                         <TouchableOpacity onPress={() => handleSavePress(field, editValues[field])}>
                                             <Image source={require('../images/icons/tick.png')} style={styles.icon} />
@@ -153,7 +168,12 @@ const InfoAccount = ({ navigation, route }) => {
                 <Text style={styles.text}>{label}</Text>
                 <View style={styles.areaUpdate}>
                     {displayValue ? (
-                        <Text style={styles.text}>{displayValue}</Text>
+                        <>
+                            <Text style={styles.text}>{displayValue}</Text>
+                            <TouchableOpacity style={styles.update} onPress={() => handleEditPress(field)}>
+                                <Image source={require('../images/icons/enter.png')} style={{ width: 16, height: 16, marginHorizontal: 5 }} />
+                            </TouchableOpacity>
+                        </>
                     ) : (
                         <TouchableOpacity style={styles.update} onPress={() => handleEditPress(field)}>
                             <Text style={[styles.text, { color: 'gray' }]}>Thiết lập ngay</Text>
@@ -223,6 +243,7 @@ const styles = StyleSheet.create({
         height: 45,
         marginBottom: 10,
         borderWidth: 0.2,
+        borderColor: 'gray',
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',

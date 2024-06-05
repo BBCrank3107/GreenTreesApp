@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
     View,
     StyleSheet,
@@ -23,6 +23,26 @@ const Support = ({ navigation, route }) => {
     const [emailError, setEmailError] = useState("");
     const [phoneError, setPhoneError] = useState("");
     const [descriptionError, setDescriptionError] = useState("");
+
+    useEffect(() => {
+        if (userID) {
+            fetch(`${ipAddress}/userInfor/${userID}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const { UserName, UserEmail, Number } = data.data;
+                        setName(UserName || "");
+                        setEmail(UserEmail || "");
+                        setPhone(Number || "");
+                    } else {
+                        console.log("Failed to fetch user data:", data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error fetching user data:", error);
+                });
+        }
+    }, [userID]);
 
     const handleSubmit = () => {
         setNameError("");
@@ -87,10 +107,10 @@ const Support = ({ navigation, route }) => {
                 </Text>
                 <View style={{ alignItems: "center" }} />
                 <View style={{ marginVertical: 20 }}>
-                    <Text style={styles.note}>Tên</Text>
+                    <Text style={styles.note}>Họ và tên</Text>
                     <TextInput
                         style={styles.input}
-                        placeholder="Nhập tên của bạn"
+                        placeholder="Nhập họ và tên của bạn"
                         value={name}
                         onChangeText={setName}
                     />

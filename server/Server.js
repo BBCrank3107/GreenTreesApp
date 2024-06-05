@@ -353,8 +353,8 @@ app.post('/purchase', (req, res) => {
     const formattedAddress = `${address}, ${ward}, ${district}, ${city}`;
     const currentDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
-    const insertSql = 'INSERT INTO seller (UserName, UserNumber, UserAddress, UserEmail, DateOrder, ProductName, Price, Quantity, Status, UserID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-    db.query(insertSql, [name, phone, formattedAddress, email, currentDate, req.body.ProductName, req.body.Price, req.body.Quantity, 'Đang xử lý', req.body.UserID], (insertErr, insertResult) => {
+    const insertSql = 'INSERT INTO seller (UserName, UserNumber, UserAddress, UserEmail, DateOrder, ProductName, Price, Quantity, Image, Status, UserID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    db.query(insertSql, [name, phone, formattedAddress, email, currentDate, req.body.ProductName, req.body.Price, req.body.Quantity, req.body.Image,'Đang xử lý', req.body.UserID], (insertErr, insertResult) => {
         if (insertErr) {
             res.status(500).send({ success: false, message: 'Failed to make purchase' });
             throw insertErr;
@@ -435,6 +435,22 @@ app.post('/user/:userID', (req, res) => {
             res.status(200).send({ message: 'User updated successfully' });
         } else {
             res.status(404).send({ message: 'User not found' });
+        }
+    });
+});
+
+app.get('/userInfor/:userID', (req, res) => {
+    const userID = req.params.userID;
+    const query = 'SELECT UserName, UserEmail, Number FROM user WHERE UserID = ?';
+    db.query(query, [userID], (err, result) => {
+        if (err) {
+            res.status(500).send({ success: false, message: 'Failed to fetch user data' });
+            throw err;
+        }
+        if (result.length > 0) {
+            res.status(200).send({ success: true, data: result[0] });
+        } else {
+            res.status(404).send({ success: false, message: 'User not found' });
         }
     });
 });

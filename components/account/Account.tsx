@@ -100,17 +100,17 @@ const Account = ({ navigation, route }: any) => {
                             ))}
                     </View>
                 ))}
-            </ScrollView>
 
-            {/* Logout Button */}
-            <View style={{ justifyContent: 'center', alignItems: 'center', marginBottom: 80 }}>
-                <TouchableOpacity style={styles.logoutButton}
-                    onPress={() => {
-                        navigation.navigate('Login')
-                    }}>
-                    <Text style={styles.logoutButtonText}>Đăng xuất</Text>
-                </TouchableOpacity>
-            </View>
+                {/* Logout Button */}
+                <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 20 }}>
+                    <TouchableOpacity style={styles.logoutButton}
+                        onPress={() => {
+                            navigation.navigate('Login')
+                        }}>
+                        <Text style={styles.logoutButtonText}>Đăng xuất</Text>
+                    </TouchableOpacity>
+                </View>
+            </ScrollView>
         </View>
     );
 };

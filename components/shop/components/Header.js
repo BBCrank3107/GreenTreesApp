@@ -172,6 +172,7 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     color: "black",
     marginRight: 20,
+    width: '100%'
   },
   baner: {
     width: 370,

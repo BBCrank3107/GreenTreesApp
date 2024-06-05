@@ -25,7 +25,6 @@ const ProductSimilar = ({ plantID, userID, navigation }) => {
                 throw new Error("Network response was not ok");
             }
             const data = await response.json();
-            console.log("Fetched data:", data);
             setProductSimilar(data);
         } catch (error) {
             console.error("Error fetching data:", error);
