@@ -12,7 +12,6 @@ import { globalColors } from '../../styles/Colors';
 const Account = ({ navigation, route }: any) => {
     const userEmail = route.params?.userEmail || '';
     const userID = route.params?.userID || '';
-
     const menuItems = [
         {
             title: "Tính năng",
