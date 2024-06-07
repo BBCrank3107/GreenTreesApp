@@ -123,6 +123,12 @@ const ShopCart = ({ navigation, route }) => {
             Price: item.Price,
             Image: item.Image
         }));
+
+        if (selectedItems.length === 0) {
+            Alert.alert('Thông báo', 'Hãy chọn sản phẩm');
+            return;
+        }
+
         navigation.navigate('purchaseInfor', {
             selectedItems,
             totalPrice,
@@ -135,7 +141,7 @@ const ShopCart = ({ navigation, route }) => {
     const totalPayment = totalPrice + shippingFee;
     return (
         <View>
-            <BackBtn onPress={() => navigation.navigate('HomeTabs', { screen: 'Shop', params: { userID } })} userID={userID} />
+            <BackBtn onPress={() => navigation.goBack()} userID={userID} />
             <View style={styles.header}>
                 <Text style={styles.title}>Giỏ hàng</Text>
             </View>

@@ -27,6 +27,8 @@ import InfoProduct from './shop/InfoProduct';
 import purchaseInfor from './shopCart/purchaseInfor';
 import Support from './account/components/Support';
 import InfoAccount from './account/components/InfoAccount';
+import Order from './account/Order';
+import InforOrder from './account/InforOder';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -141,6 +143,8 @@ export default RootComponent = function () {
                 <Stack.Screen name="purchaseInfor" component={purchaseInfor} />
                 <Stack.Screen name="Support" component={Support} />
                 <Stack.Screen name="InfoAccount" component={InfoAccount} />
+                <Stack.Screen name="Order" component={Order} />
+                <Stack.Screen name="InforOrder" component={InforOrder} />
             </Stack.Navigator>
         </NavigationContainer>
     )

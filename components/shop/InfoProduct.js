@@ -18,7 +18,7 @@ import { ipAddress } from "../../ip/ip";
 export default function InfoProduct({ route, navigation }) {
     const { productInfo, productName, productImage, productPrice, productPlantID, productStatus, userID } = route.params;
 
-    const [quantity, setQuantity] = useState(0);
+    const [quantity, setQuantity] = useState(1);
 
     // Hàm xử lý tăng số lượng
     const increaseQuantity = () => {
@@ -38,16 +38,20 @@ export default function InfoProduct({ route, navigation }) {
 
     // Hàm xử lý thay đổi số lượng
     const handleQuantityChange = (text) => {
-        const parsedQuantity = parseInt(text, 10);
-        if (!isNaN(parsedQuantity) && parsedQuantity > 0) {
-            if (parsedQuantity > 1000) {
-                Alert.alert('Số lượng đã đạt giới hạn');
-                setQuantity(1000);
-            } else {
-                setQuantity(parsedQuantity);
-            }
+        if (text === '') {
+            setQuantity(0);
         } else {
-            setQuantity(1);
+            const parsedQuantity = parseInt(text, 10);
+            if (!isNaN(parsedQuantity) && parsedQuantity > 0) {
+                if (parsedQuantity > 1000) {
+                    Alert.alert('Số lượng đã đạt giới hạn');
+                    setQuantity(1000);
+                } else {
+                    setQuantity(parsedQuantity);
+                }
+            } else {
+                setQuantity(1);
+            }
         }
     };
 
@@ -172,7 +176,7 @@ export default function InfoProduct({ route, navigation }) {
             </View>
         </View>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {

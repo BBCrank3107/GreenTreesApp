@@ -100,7 +100,7 @@ const Support = ({ navigation, route }) => {
 
     return (
         <KeyboardAvoidingView style={styles.container}>
-            <BackBtn onPress={() => navigation.navigate("Account", { userID })} />
+            <BackBtn onPress={() => navigation.goBack()} userID={userID} />
             <ScrollView contentContainerStyle={styles.scrollView}>
                 <Text style={styles.title}>
                     Gửi yêu cầu hỗ trợ. Chúng tôi sẽ liên hệ lại với bạn

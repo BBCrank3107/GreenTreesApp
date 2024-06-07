@@ -7,7 +7,7 @@ const BackBtn = ({ onPress, userID }) => {
 
     const handlePress = () => {
         if (onPress && typeof onPress === 'function') {
-            onPress(); // Gọi onPress nếu nó là một hàm
+            onPress();
         } else {
             navigation.navigate('HomeTabs', { screen: 'Shop', params: { userID } });
         }
