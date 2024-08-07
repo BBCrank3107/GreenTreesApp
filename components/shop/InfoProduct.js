@@ -20,6 +20,10 @@ export default function InfoProduct({ route, navigation }) {
 
     const [quantity, setQuantity] = useState(1);
 
+    const formatCurrency = (amount) => {
+        return amount.toLocaleString('vi-VN');
+    };
+
     // Hàm xử lý tăng số lượng
     const increaseQuantity = () => {
         if (quantity < 1000) {
@@ -62,6 +66,10 @@ export default function InfoProduct({ route, navigation }) {
 
     // Hàm thêm vào giỏ hàng
     const addToCart = async () => {
+        if (productStatus === "Hết hàng") {
+            Alert.alert("Sản phẩm đã hết hàng");
+            return;
+        }
         if (quantity <= 0) {
             Alert.alert('Lỗi!', 'Số lượng phải lớn hơn 0');
             return;
@@ -120,12 +128,19 @@ export default function InfoProduct({ route, navigation }) {
                     </View>
                     <View style={styles.state}>
                         <View>
-                            <Text style={{ fontSize: 20, color: 'red' }}>{productPrice} VNĐ</Text>
+                            <Text style={{ fontSize: 20, color: 'red' }}>{formatCurrency(productPrice)} VNĐ</Text>
                         </View>
                         <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                             <Text style={{ fontSize: 20 }}>Tình trạng: </Text>
                             <View style={styles.boxState}>
-                                <Text style={styles.textState}>{productStatus}</Text>
+                                <Text
+                                    style={[
+                                        styles.textState,
+                                        { color: productStatus === "Hết hàng" ? "red" : "green" },
+                                    ]}
+                                >
+                                    {productStatus}
+                                </Text>
                             </View>
                         </View>
                     </View>
@@ -146,7 +161,7 @@ export default function InfoProduct({ route, navigation }) {
             </ScrollView>
             <View style={styles.bottom}>
                 <View style={styles.areaPricePlant}>
-                    <Text style={styles.pricePlant}>{calculateTotalPrice()} VNĐ</Text>
+                    <Text style={styles.pricePlant}>{formatCurrency(calculateTotalPrice())} VNĐ</Text>
                     <View style={styles.areaQuantity}>
                         {/* Button giảm số lượng */}
                         <TouchableOpacity style={styles.btnUpAnDown} onPress={decreaseQuantity}>

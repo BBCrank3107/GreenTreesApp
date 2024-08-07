@@ -64,41 +64,6 @@ const InforOrder = ({ navigation }) => {
     return `${year}-${month}-${day}`;
   };
 
-  const handleDelete = async (OrderCode) => {
-    try {
-      const response = await fetch(
-        `${ipAddress}/api/delete-seller/${OrderCode}`,
-        {
-          method: "DELETE",
-        }
-      );
-      if (response.ok) {
-        console.log("Order deleted successfully");
-        navigation.replace("Order", { key: CHOLAYHANG, userID });
-      } else {
-        console.log("Failed to delete order");
-      }
-    } catch (err) {
-      console.log("ERR", err);
-    }
-  };
-
-  const confirmDelete = (OrderCode) => {
-    Alert.alert(
-      "Xác nhận",
-      "Bạn có chắc chắn muốn hủy đơn hàng này?",
-      [
-        {
-          text: "Hủy",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel",
-        },
-        { text: "OK", onPress: () => handleDelete(OrderCode) },
-      ],
-      { cancelable: false }
-    );
-  };
-
   // Hàm handleBackPress
   const handleBackPress = () => {
     navigation.goBack()
@@ -190,18 +155,6 @@ const InforOrder = ({ navigation }) => {
             </Text>
           </View>
         </View>
-
-
-        {orderPro.length > 0 && orderPro[0].Status !== CHOGIAOHANG && orderPro[0].Status !== DAGIAOHANG && (
-          <View style={styles.areaBtn}>
-            <TouchableOpacity
-              style={styles.btn}
-              onPress={() => confirmDelete(OrderCode)}
-            >
-              <Text style={styles.btnText}>Hủy đơn hàng</Text>
-            </TouchableOpacity>
-          </View>
-        )}
       </View>
     </ScrollView>
   );

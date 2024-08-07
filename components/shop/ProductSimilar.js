@@ -12,6 +12,10 @@ import { ipAddress } from "../../ip/ip";
 const ProductSimilar = ({ plantID, userID, navigation }) => {
     const [productSimilar, setProductSimilar] = useState([]);
 
+    const formatCurrency = (amount) => {
+        return amount.toLocaleString('vi-VN');
+    };
+
     useEffect(() => {
         if (plantID) {
             fetchData();
@@ -44,7 +48,7 @@ const ProductSimilar = ({ plantID, userID, navigation }) => {
                         productPrice: product.Price,
                         productPlantID: product.PlantID,
                         productID: product.ProductID,
-                        productStatus:product.Status,
+                        productStatus: product.Status,
                         userID: userID,
                     },
                 },
@@ -69,7 +73,7 @@ const ProductSimilar = ({ plantID, userID, navigation }) => {
                             <View style={styles.underImg}>
                                 <View style={styles.underLeftImg}>
                                     <Text style={styles.namePlant}>{product.ProductName}</Text>
-                                    <Text style={styles.pricePlant}>{product.Price} VNĐ</Text>
+                                    <Text style={styles.pricePlant}>{formatCurrency(product.Price)} VNĐ</Text>
                                 </View>
                                 <TouchableOpacity style={styles.underRightImg}>
                                     <Image

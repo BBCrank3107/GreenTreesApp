@@ -169,9 +169,9 @@ const Order = ({ navigation }) => {
 
   const getOrderMessage = () => {
     if (page === CHOLAYHANG) {
-      return "Chúng tôi đang chuẩn bị hàng và sẽ bàn giao sớm cho đơn vị vận chuyển.";
+      return "Đang chuẩn bị hàng và sẽ bàn giao sớm cho đơn vị vận chuyển.";
     } else if (page === CHOGIAOHANG) {
-      return "Đơn hàng đang được giao đến chỗ bạn. Bạn đã nhận hàng chưa ?";
+      return "Đơn hàng đang được giao đến bạn. Bạn đã nhận hàng chưa ?";
     } else if (page === DAGIAOHANG) {
       return "Cảm ơn bạn đã mua hàng của chúng tôi.";
     }
@@ -418,13 +418,13 @@ const styles = StyleSheet.create({
   },
   fullNoOrder: {
     width: "100%",
-    height: "99%",
-    backgroundColor: "rgb(180, 181, 182)",
+    height: "100%",
+    backgroundColor: "rgb(200, 200, 200)",
   },
   areaNoOrder: {
     width: "100%",
     height: "75%",
-    backgroundColor: "rgb(180, 181, 182)",
+    backgroundColor: "rgb(200, 200, 200)",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -434,12 +434,13 @@ const styles = StyleSheet.create({
     height: 90,
   },
   textNoOrder: {
-    fontSize: 14,
+    fontSize: 20,
     fontWeight: "300",
     marginTop: 15,
+    color: 'black'
   },
   textCon: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
     width: "65%",
     height: "100%",
   },

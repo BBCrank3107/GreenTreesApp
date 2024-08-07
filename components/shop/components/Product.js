@@ -8,6 +8,10 @@ const Product = ({ selectedCategory, userID, setSelectedCategory }) => {
     const [filteredProductData, setFilteredProductData] = useState([]);
     const { searchResults } = useContext(SearchContext);
 
+    const formatCurrency = (amount) => {
+        return amount.toLocaleString('vi-VN');
+    };
+
     const navigation = useNavigation();
 
     useEffect(() => {
@@ -81,7 +85,7 @@ const Product = ({ selectedCategory, userID, setSelectedCategory }) => {
                                             <Text style={styles.namePlant}>
                                                 {product.ProductName}
                                             </Text>
-                                            <Text style={styles.pricePlant}>{product.Price} VNĐ</Text>
+                                            <Text style={styles.pricePlant}>{formatCurrency(product.Price)} VNĐ</Text>
                                         </View>
                                         <TouchableOpacity
                                             style={styles.underRightImg}
@@ -140,7 +144,7 @@ const Product = ({ selectedCategory, userID, setSelectedCategory }) => {
                                             <Text style={styles.namePlant}>
                                                 {product.ProductName}
                                             </Text>
-                                            <Text style={styles.pricePlant}>{product.Price} VNĐ</Text>
+                                            <Text style={styles.pricePlant}>{formatCurrency(product.Price)} VNĐ</Text>
                                         </View>
                                         <TouchableOpacity
                                             style={styles.underRightImg}

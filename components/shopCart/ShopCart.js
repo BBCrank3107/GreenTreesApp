@@ -25,6 +25,10 @@ const ShopCart = ({ navigation, route }) => {
     const [showAlert, setShowAlert] = useState(false);
     const [deleteItemId, setDeleteItemId] = useState(null);
 
+    const formatCurrency = (amount) => {
+        return amount.toLocaleString('vi-VN');
+    };
+
     const userID = route.params?.userID || '';
 
     useEffect(() => {
@@ -161,7 +165,7 @@ const ShopCart = ({ navigation, route }) => {
                             </View>
                             <View style={styles.areaInfo}>
                                 <Text style={styles.textName}>{item.ProductName}</Text>
-                                <Text style={styles.textPrice}>{item.Price.toLocaleString()} VNĐ</Text>
+                                <Text style={styles.textPrice}>{formatCurrency(item.Price)} VNĐ</Text>
                             </View>
                             <View style={styles.handle}>
                                 <View style={styles.deleteIconContainer}>
@@ -197,19 +201,19 @@ const ShopCart = ({ navigation, route }) => {
                 <View style={styles.priceProduct}>
                     <Text style={styles.text1}>Tổng tiền hàng:</Text>
                     <Text style={styles.text2}>
-                        {totalPrice.toLocaleString()} VNĐ
+                        {formatCurrency(totalPrice)} VNĐ
                     </Text>
                 </View>
                 <View style={styles.priceProduct}>
                     <Text style={styles.text1}>Phí vận chuyển:</Text>
                     <Text style={styles.text2}>
-                        {shippingFee.toLocaleString()} VNĐ
+                        {formatCurrency(shippingFee)} VNĐ
                     </Text>
                 </View>
                 <View style={styles.priceProduct}>
                     <Text style={styles.text1}>Tổng thanh toán:</Text>
                     <Text style={styles.text2}>
-                        {totalPayment.toLocaleString()} VNĐ
+                        {formatCurrency(totalPayment)} VNĐ
                     </Text>
                 </View>
                 <View style={styles.areaBtn}>

@@ -30,6 +30,10 @@ const PurchaseInfor = ({ navigation, route }) => {
     const [wards, setWards] = useState([]);
     const textErr = "Vui lòng điền đủ thông tin";
 
+    const formatCurrency = (amount) => {
+        return amount.toLocaleString('vi-VN');
+    };
+
     const fetchUserData = async () => {
         try {
             const response = await fetch(`${ipAddress}/userInfor/${userID}`);
@@ -109,7 +113,7 @@ const PurchaseInfor = ({ navigation, route }) => {
 
     return (
         <ScrollView style={styles.container}>
-            <BackBtn onPress={() => navigation.navigate('ShopCart', {userID})} />
+            <BackBtn onPress={() => navigation.navigate('ShopCart', { userID })} />
             <Text style={{ fontSize: 30, color: globalColors.mainGreen, textAlign: 'center', paddingBottom: 20, fontWeight: '500' }}>Thông tin sản phẩm</Text>
             <View style={styles.proTable}>
                 <View style={styles.table}>
@@ -124,7 +128,7 @@ const PurchaseInfor = ({ navigation, route }) => {
                             <View key={index} style={styles.row}>
                                 <Text style={[styles.plantName]}>{item.ProductName}</Text>
                                 <Text style={[styles.quantity]}>{item.Quantity}</Text>
-                                <Text style={[styles.priceProduct, { color: 'red' }]}>{item.Price.toLocaleString()} đ</Text>
+                                <Text style={[styles.priceProduct, { color: 'red' }]}>{formatCurrency(item.Price)} đ</Text>
                             </View>
                         )
                     })}
@@ -132,15 +136,15 @@ const PurchaseInfor = ({ navigation, route }) => {
                 <View style={{ width: '100%', marginTop: 10 }}>
                     <View style={styles.totalPrice}>
                         <Text style={styles.textPrice}>Tổng tiền:</Text>
-                        <Text style={styles.price}>{totalPrice} VNĐ</Text>
+                        <Text style={styles.price}>{formatCurrency(totalPrice)} VNĐ</Text>
                     </View>
                     <View style={styles.totalPrice}>
                         <Text style={styles.textPrice}>Phí vận chuyển:</Text>
-                        <Text style={styles.price}>{shippingFee} VNĐ</Text>
+                        <Text style={styles.price}>{formatCurrency(shippingFee)} VNĐ</Text>
                     </View>
                     <View style={styles.totalPrice}>
                         <Text style={styles.textPrice}>Tổng thanh toán:</Text>
-                        <Text style={styles.price}>{totalPayment} VNĐ</Text>
+                        <Text style={styles.price}>{formatCurrency(totalPayment)} VNĐ</Text>
                     </View>
                 </View>
             </View>
@@ -312,106 +316,106 @@ const PurchaseInfor = ({ navigation, route }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  proTable: {
-    justifyContent: 'center',
-    backgroundColor: 'white',
-    borderRadius: 15,
-    padding: 15,
-    marginBottom: 20,
-    marginHorizontal: 10,
-    elevation: 2,
-  },
-  table: {
-    width: '100%',
-  },
-  row: {
-    flexDirection: 'row',
-    marginBottom: 5,
-  },
-  label: {
-    fontWeight: 'bold',
-    fontSize: 18
-  },
-  headerRow: {
-    backgroundColor: '#f0f0f0',
-  },
-  header: {
-    color: 'black',
-  },
-  plantName: {
-    flex: 1,
-    fontSize: 16
-  },
-  priceProduct: {
-    flex: 1,
-    textAlign: 'center',
-    fontSize: 16
-  },
-  quantity: {
-    flex: 1,
-    textAlign: 'center',
-    fontSize: 16
-  },
-  totalPrice: {
-    width: '100%',
-    justifyContent: 'flex-end',
-    flexDirection: 'row',
-    paddingHorizontal: 10
-  },
-  textPrice: {
-    fontSize: 16,
-    color: 'black'
-  },
-  price: {
-    fontSize: 16,
-    color: 'red',
-    paddingLeft: 10
-  },
-  formGroup: {
-    marginBottom: 15,
-    paddingHorizontal: 20,
-  },
-  input: {
-    height: 40,
-    borderColor: "#4D8D6E",
-    borderWidth: 1,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginBottom: 10,
-    fontSize: 16,
-    backgroundColor: "white",
-  },
-  pickerContainer: {
-    borderWidth: 1,
-    borderColor: "#4D8D6E",
-    borderRadius: 5,
-    marginBottom: 10,
-    overflow: "hidden",
-    backgroundColor: "white",
-  },
-  picker: {
-    height: 50,
-  },
-  button: {
-    backgroundColor: "#4D8D6E",
-    paddingVertical: 10,
-    borderRadius: 25,
-    alignItems: "center",
-    marginHorizontal: 20,
-    marginBottom: 20,
-    elevation: 5
-  },
-  buttonText: {
-    color: "#fff",
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  errorText: {
-    color: "red",
-  },
+    container: {
+        flex: 1,
+    },
+    proTable: {
+        justifyContent: 'center',
+        backgroundColor: 'white',
+        borderRadius: 15,
+        padding: 15,
+        marginBottom: 20,
+        marginHorizontal: 10,
+        elevation: 2,
+    },
+    table: {
+        width: '100%',
+    },
+    row: {
+        flexDirection: 'row',
+        marginBottom: 5,
+    },
+    label: {
+        fontWeight: 'bold',
+        fontSize: 18
+    },
+    headerRow: {
+        backgroundColor: '#f0f0f0',
+    },
+    header: {
+        color: 'black',
+    },
+    plantName: {
+        flex: 1,
+        fontSize: 16
+    },
+    priceProduct: {
+        flex: 1,
+        textAlign: 'center',
+        fontSize: 16
+    },
+    quantity: {
+        flex: 1,
+        textAlign: 'center',
+        fontSize: 16
+    },
+    totalPrice: {
+        width: '100%',
+        justifyContent: 'flex-end',
+        flexDirection: 'row',
+        paddingHorizontal: 10
+    },
+    textPrice: {
+        fontSize: 16,
+        color: 'black'
+    },
+    price: {
+        fontSize: 16,
+        color: 'red',
+        paddingLeft: 10
+    },
+    formGroup: {
+        marginBottom: 15,
+        paddingHorizontal: 20,
+    },
+    input: {
+        height: 40,
+        borderColor: "#4D8D6E",
+        borderWidth: 1,
+        borderRadius: 5,
+        paddingHorizontal: 10,
+        marginBottom: 10,
+        fontSize: 16,
+        backgroundColor: "white",
+    },
+    pickerContainer: {
+        borderWidth: 1,
+        borderColor: "#4D8D6E",
+        borderRadius: 5,
+        marginBottom: 10,
+        overflow: "hidden",
+        backgroundColor: "white",
+    },
+    picker: {
+        height: 50,
+    },
+    button: {
+        backgroundColor: "#4D8D6E",
+        paddingVertical: 10,
+        borderRadius: 25,
+        alignItems: "center",
+        marginHorizontal: 20,
+        marginBottom: 20,
+        elevation: 5
+    },
+    buttonText: {
+        color: "#fff",
+        fontSize: 20,
+        fontWeight: "bold",
+    },
+    errorText: {
+        color: "red",
+    },
 });
 
 export default PurchaseInfor;
